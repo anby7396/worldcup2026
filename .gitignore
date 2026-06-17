@@ -13,3 +13,7 @@ Thumbs.db
 
 # 依赖（本项目无后端依赖，预留）
 node_modules/
+
+# 沙箱测试残留（空文件，无法删除）
+_a.tmp
+_test_delete.tmp

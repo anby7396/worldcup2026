@@ -5,6 +5,7 @@ import { renderSchedule } from './views/schedule.js';
 import { renderGroups } from './views/groups.js';
 import { renderBracket } from './views/bracket.js';
 import { renderPredictor } from './views/predictor.js';
+import { renderValuebets } from './views/valuebets.js';
 
 let data = null;
 let currentView = 'format';
@@ -15,6 +16,7 @@ const views = {
   groups: renderGroups,
   bracket: renderBracket,
   predictor: renderPredictor,
+  valuebets: renderValuebets,
 };
 
 // 解析 hash：支持 "predictor" 或 "predictor?h=ESP&a=ARG"（用于一键预测）

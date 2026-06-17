@@ -21,6 +21,15 @@ export async function loadData() {
 
   data.results = { ...autoResults, ...loadResults() };
   data.teamMap = Object.fromEntries(data.teams.map(t => [t.id, t]));
+
+  // 赔率数据：由 scripts/sync-odds.mjs 同步到 data/odds.json
+  // 缺失不影响其他功能
+  try {
+    const r3 = await fetch('data/odds.json');
+    if (r3.ok) data.odds = await r3.json();
+  } catch { /* odds.json 不存在时忽略 */ }
+  data.odds = data.odds || { meta: { fetchedAt: null }, matches: [] };
+
   return data;
 }
 
