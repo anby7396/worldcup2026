@@ -1,0 +1,46 @@
+# 每小时自动同步 ESPN 比分并部署到 GitHub Pages
+# 触发：定时 / 手动 / push 到 main
+name: 同步比分并部署
+
+on:
+  schedule:
+    - cron: '17 * * * *'      # 每小时第 17 分钟（UTC）
+  workflow_dispatch:           # 允许手动触发
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: 同步最新比分（ESPN）
+        run: node sync.mjs
+      - uses: actions/configure-pages@v5
+      - name: 上传站点
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

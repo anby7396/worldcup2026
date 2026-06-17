@@ -1,0 +1,14 @@
+{
+  "name": "worldcup-2026",
+  "version": "1.0.0",
+  "description": "2026 世界杯赛程 + 比赛预测助手（本地工具）",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "sync": "node sync.mjs",
+    "autosync": "node scripts/autosync.mjs",
+    "autosync:install": "node scripts/autosync.mjs install",
+    "autosync:uninstall": "node scripts/autosync.mjs uninstall",
+    "test": "node test/verify.mjs"
+  }
+}
