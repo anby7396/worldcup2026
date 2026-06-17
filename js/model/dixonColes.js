@@ -48,6 +48,7 @@ const RHO = -0.13;              // Dixon-Coles 修正系数（足球文献典型
  *   homeAdvantage — 主场系数（>1 强主场），默认 1.0（中立场）
  *   altitudeAdj   — { home, away } xG 调整（来自 altitudeAdjust）
  *   keyOut        — { home: 'attack'|'defense'|null, away: ... } 关键球员缺阵
+ *   leagueAvg     — 单队预期进球基准，默认 1.35（可由市场大球数据校准）
  */
 export function predictDC(opts) {
   const {
@@ -56,6 +57,7 @@ export function predictDC(opts) {
     homeAdvantage = 1.0,
     altitudeAdj = { home: 1, away: 1 },
     keyOut = { home: null, away: null },
+    leagueAvg = LEAGUE_AVG_GOALS,
   } = opts;
 
   // 应用关键球员缺阵（缺前锋扣 attack，缺后腰/中卫扣 defense）
@@ -66,8 +68,8 @@ export function predictDC(opts) {
 
   // λ_home = league_avg × home_attack × away_inverse_defense × home_adv × altitude
   // 防守强 → 让对手少进球，所以用 1/defense
-  let lambdaH = LEAGUE_AVG_GOALS * ha * (1 / ad) * homeAdvantage * altitudeAdj.home;
-  let lambdaA = LEAGUE_AVG_GOALS * aa * (1 / hd) * (1 / Math.sqrt(homeAdvantage)) * altitudeAdj.away;
+  let lambdaH = leagueAvg * ha * (1 / ad) * homeAdvantage * altitudeAdj.home;
+  let lambdaA = leagueAvg * aa * (1 / hd) * (1 / Math.sqrt(homeAdvantage)) * altitudeAdj.away;
 
   lambdaH = Math.max(0.15, Math.min(5.5, lambdaH));
   lambdaA = Math.max(0.15, Math.min(5.5, lambdaA));

@@ -42,11 +42,22 @@ if (!apiKey) {
   process.exit(1);
 }
 
+// the-odds-api 用的队名 → 数据集 id（API 名跟 FIFA 官方名有出入）
+const API_ALIASES = {
+  'Czech Republic': 'CZE',
+  'Bosnia & Herzegovina': 'BIH',
+  'Turkey': 'TUR',
+  'Ivory Coast': 'CIV',
+  'Cape Verde': 'CPV',
+  'Iran': 'IRN',
+};
+
 // 已知 2026 世界杯 48 队 ID 映射 the-odds-api 用的队名（拉取后手动校准）
 // 这里只放一个空模板，第一次跑完后会输出未匹配的队名让你补全。
 async function loadTeamAliases() {
   const local = JSON.parse(await readFile('data/worldcup2026.json', 'utf8'));
-  return Object.fromEntries(local.teams.map(t => [t.name, t.id]));
+  const base = Object.fromEntries(local.teams.map(t => [t.name, t.id]));
+  return { ...base, ...API_ALIASES };
 }
 
 async function fetchOdds() {

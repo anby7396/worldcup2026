@@ -2,16 +2,32 @@
   "meta": {
     "name": "2026 FIFA World Cup",
     "nameCn": "2026 国际足联世界杯",
-    "hosts": ["美国", "加拿大", "墨西哥"],
-    "hostsEn": ["USA", "Canada", "Mexico"],
+    "hosts": [
+      "美国",
+      "加拿大",
+      "墨西哥"
+    ],
+    "hostsEn": [
+      "USA",
+      "Canada",
+      "Mexico"
+    ],
     "startDate": "2026-06-11",
     "endDate": "2026-07-19",
     "teamCount": 48,
     "groupCount": 12,
     "totalMatches": 104,
     "groupMatches": 72,
-    "opener": { "home": "MEX", "away": "RSA", "date": "2026-06-11", "venue": "墨西哥城体育场 (Estadio Azteca)" },
-    "final": { "date": "2026-07-19", "venue": "纽约/新泽西大都会人寿体育场" },
+    "opener": {
+      "home": "MEX",
+      "away": "RSA",
+      "date": "2026-06-11",
+      "venue": "墨西哥城体育场 (Estadio Azteca)"
+    },
+    "final": {
+      "date": "2026-07-19",
+      "venue": "纽约/新泽西大都会人寿体育场"
+    },
     "format": {
       "summary": "48 队分 12 组，每组 4 队单循环；各组前 2 名 + 成绩最好的 8 个第三名，共 32 队进淘汰赛；淘汰赛新增 1/16 决赛，夺冠需踢 8 场。",
       "advance": "每组前2名(24队) + 8个最好的第三名 = 32队进1/16决赛",
@@ -24,198 +40,1532 @@
         "抽签"
       ],
       "note": "FIFA 设置两条半区通道，使排名最高的两队(西班牙、阿根廷)最早只能在决赛相遇。"
-    }
+    },
+    "leagueAvg": 1.17
   },
   "teams": [
-    { "id": "MEX", "name": "Mexico",        "nameCn": "墨西哥",      "flag": "🇲🇽", "group": "A", "elo": 1820, "host": true,  "rank": 14 },
-    { "id": "RSA", "name": "South Africa",  "nameCn": "南非",        "flag": "🇿🇦", "group": "A", "elo": 1720, "host": false, "rank": 56 },
-    { "id": "KOR", "name": "South Korea",   "nameCn": "韩国",        "flag": "🇰🇷", "group": "A", "elo": 1790, "host": false, "rank": 23 },
-    { "id": "CZE", "name": "Czechia",       "nameCn": "捷克",        "flag": "🇨🇿", "group": "A", "elo": 1815, "host": false, "rank": 41 },
-
-    { "id": "CAN", "name": "Canada",        "nameCn": "加拿大",      "flag": "🇨🇦", "group": "B", "elo": 1780, "host": true,  "rank": 30 },
-    { "id": "BIH", "name": "Bosnia & H.",   "nameCn": "波黑",        "flag": "🇧🇦", "group": "B", "elo": 1710, "host": false, "rank": 64 },
-    { "id": "QAT", "name": "Qatar",         "nameCn": "卡塔尔",      "flag": "🇶🇦", "group": "B", "elo": 1680, "host": false, "rank": 52 },
-    { "id": "SUI", "name": "Switzerland",   "nameCn": "瑞士",        "flag": "🇨🇭", "group": "B", "elo": 1860, "host": false, "rank": 19 },
-
-    { "id": "BRA", "name": "Brazil",        "nameCn": "巴西",        "flag": "🇧🇷", "group": "C", "elo": 2020, "host": false, "rank": 5  },
-    { "id": "MAR", "name": "Morocco",       "nameCn": "摩洛哥",      "flag": "🇲🇦", "group": "C", "elo": 1880, "host": false, "rank": 12 },
-    { "id": "HAI", "name": "Haiti",         "nameCn": "海地",        "flag": "🇭🇹", "group": "C", "elo": 1600, "host": false, "rank": 84 },
-    { "id": "SCO", "name": "Scotland",      "nameCn": "苏格兰",      "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "group": "C", "elo": 1800, "host": false, "rank": 38 },
-
-    { "id": "USA", "name": "USA",           "nameCn": "美国",        "flag": "🇺🇸", "group": "D", "elo": 1800, "host": true,  "rank": 16 },
-    { "id": "PAR", "name": "Paraguay",      "nameCn": "巴拉圭",      "flag": "🇵🇾", "group": "D", "elo": 1750, "host": false, "rank": 39 },
-    { "id": "AUS", "name": "Australia",     "nameCn": "澳大利亚",    "flag": "🇦🇺", "group": "D", "elo": 1760, "host": false, "rank": 26 },
-    { "id": "TUR", "name": "Türkiye",       "nameCn": "土耳其",      "flag": "🇹🇷", "group": "D", "elo": 1830, "host": false, "rank": 27 },
-
-    { "id": "GER", "name": "Germany",       "nameCn": "德国",        "flag": "🇩🇪", "group": "E", "elo": 1960, "host": false, "rank": 9  },
-    { "id": "CUW", "name": "Curaçao",       "nameCn": "库拉索",      "flag": "🇨🇼", "group": "E", "elo": 1580, "host": false, "rank": 82 },
-    { "id": "CIV", "name": "Côte d'Ivoire", "nameCn": "科特迪瓦",    "flag": "🇨🇮", "group": "E", "elo": 1820, "host": false, "rank": 40 },
-    { "id": "ECU", "name": "Ecuador",       "nameCn": "厄瓜多尔",    "flag": "🇪🇨", "group": "E", "elo": 1835, "host": false, "rank": 24 },
-
-    { "id": "NED", "name": "Netherlands",   "nameCn": "荷兰",        "flag": "🇳🇱", "group": "F", "elo": 2010, "host": false, "rank": 7  },
-    { "id": "JPN", "name": "Japan",         "nameCn": "日本",        "flag": "🇯🇵", "group": "F", "elo": 1850, "host": false, "rank": 17 },
-    { "id": "SWE", "name": "Sweden",        "nameCn": "瑞典",        "flag": "🇸🇪", "group": "F", "elo": 1820, "host": false, "rank": 36 },
-    { "id": "TUN", "name": "Tunisia",       "nameCn": "突尼斯",      "flag": "🇹🇳", "group": "F", "elo": 1700, "host": false, "rank": 49 },
-
-    { "id": "BEL", "name": "Belgium",       "nameCn": "比利时",      "flag": "🇧🇪", "group": "G", "elo": 1950, "host": false, "rank": 8  },
-    { "id": "EGY", "name": "Egypt",         "nameCn": "埃及",        "flag": "🇪🇬", "group": "G", "elo": 1780, "host": false, "rank": 34 },
-    { "id": "IRN", "name": "IR Iran",       "nameCn": "伊朗",        "flag": "🇮🇷", "group": "G", "elo": 1800, "host": false, "rank": 21 },
-    { "id": "NZL", "name": "New Zealand",   "nameCn": "新西兰",      "flag": "🇳🇿", "group": "G", "elo": 1620, "host": false, "rank": 86 },
-
-    { "id": "ESP", "name": "Spain",         "nameCn": "西班牙",      "flag": "🇪🇸", "group": "H", "elo": 2120, "host": false, "rank": 1  },
-    { "id": "CPV", "name": "Cabo Verde",    "nameCn": "佛得角",      "flag": "🇨🇻", "group": "H", "elo": 1610, "host": false, "rank": 70 },
-    { "id": "KSA", "name": "Saudi Arabia",  "nameCn": "沙特阿拉伯",  "flag": "🇸🇦", "group": "H", "elo": 1680, "host": false, "rank": 58 },
-    { "id": "URU", "name": "Uruguay",       "nameCn": "乌拉圭",      "flag": "🇺🇾", "group": "H", "elo": 1930, "host": false, "rank": 11 },
-
-    { "id": "FRA", "name": "France",        "nameCn": "法国",        "flag": "🇫🇷", "group": "I", "elo": 2080, "host": false, "rank": 3  },
-    { "id": "SEN", "name": "Senegal",       "nameCn": "塞内加尔",    "flag": "🇸🇳", "group": "I", "elo": 1855, "host": false, "rank": 18 },
-    { "id": "IRQ", "name": "Iraq",          "nameCn": "伊拉克",      "flag": "🇮🇶", "group": "I", "elo": 1680, "host": false, "rank": 57 },
-    { "id": "NOR", "name": "Norway",        "nameCn": "挪威",        "flag": "🇳🇴", "group": "I", "elo": 1850, "host": false, "rank": 28 },
-
-    { "id": "ARG", "name": "Argentina",     "nameCn": "阿根廷",      "flag": "🇦🇷", "group": "J", "elo": 2100, "host": false, "rank": 2  },
-    { "id": "ALG", "name": "Algeria",       "nameCn": "阿尔及利亚",  "flag": "🇩🇿", "group": "J", "elo": 1790, "host": false, "rank": 37 },
-    { "id": "AUT", "name": "Austria",       "nameCn": "奥地利",      "flag": "🇦🇹", "group": "J", "elo": 1820, "host": false, "rank": 22 },
-    { "id": "JOR", "name": "Jordan",        "nameCn": "约旦",        "flag": "🇯🇴", "group": "J", "elo": 1640, "host": false, "rank": 62 },
-
-    { "id": "POR", "name": "Portugal",      "nameCn": "葡萄牙",      "flag": "🇵🇹", "group": "K", "elo": 2000, "host": false, "rank": 6  },
-    { "id": "COD", "name": "DR Congo",      "nameCn": "刚果(金)",    "flag": "🇨🇩", "group": "K", "elo": 1750, "host": false, "rank": 60 },
-    { "id": "UZB", "name": "Uzbekistan",    "nameCn": "乌兹别克斯坦", "flag": "🇺🇿", "group": "K", "elo": 1680, "host": false, "rank": 54 },
-    { "id": "COL", "name": "Colombia",      "nameCn": "哥伦比亚",    "flag": "🇨🇴", "group": "K", "elo": 1980, "host": false, "rank": 13 },
-
-    { "id": "ENG", "name": "England",       "nameCn": "英格兰",      "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "group": "L", "elo": 2010, "host": false, "rank": 4  },
-    { "id": "CRO", "name": "Croatia",       "nameCn": "克罗地亚",    "flag": "🇭🇷", "group": "L", "elo": 1900, "host": false, "rank": 10 },
-    { "id": "GHA", "name": "Ghana",         "nameCn": "加纳",        "flag": "🇬🇭", "group": "L", "elo": 1760, "host": false, "rank": 72 },
-    { "id": "PAN", "name": "Panama",        "nameCn": "巴拿马",      "flag": "🇵🇦", "group": "L", "elo": 1680, "host": false, "rank": 42 }
+    {
+      "id": "MEX",
+      "name": "Mexico",
+      "nameCn": "墨西哥",
+      "flag": "🇲🇽",
+      "group": "A",
+      "elo": 1820,
+      "host": true,
+      "rank": 14
+    },
+    {
+      "id": "RSA",
+      "name": "South Africa",
+      "nameCn": "南非",
+      "flag": "🇿🇦",
+      "group": "A",
+      "elo": 1720,
+      "host": false,
+      "rank": 56
+    },
+    {
+      "id": "KOR",
+      "name": "South Korea",
+      "nameCn": "韩国",
+      "flag": "🇰🇷",
+      "group": "A",
+      "elo": 1790,
+      "host": false,
+      "rank": 23
+    },
+    {
+      "id": "CZE",
+      "name": "Czechia",
+      "nameCn": "捷克",
+      "flag": "🇨🇿",
+      "group": "A",
+      "elo": 1815,
+      "host": false,
+      "rank": 41
+    },
+    {
+      "id": "CAN",
+      "name": "Canada",
+      "nameCn": "加拿大",
+      "flag": "🇨🇦",
+      "group": "B",
+      "elo": 1780,
+      "host": true,
+      "rank": 30
+    },
+    {
+      "id": "BIH",
+      "name": "Bosnia & H.",
+      "nameCn": "波黑",
+      "flag": "🇧🇦",
+      "group": "B",
+      "elo": 1710,
+      "host": false,
+      "rank": 64
+    },
+    {
+      "id": "QAT",
+      "name": "Qatar",
+      "nameCn": "卡塔尔",
+      "flag": "🇶🇦",
+      "group": "B",
+      "elo": 1680,
+      "host": false,
+      "rank": 52
+    },
+    {
+      "id": "SUI",
+      "name": "Switzerland",
+      "nameCn": "瑞士",
+      "flag": "🇨🇭",
+      "group": "B",
+      "elo": 1860,
+      "host": false,
+      "rank": 19
+    },
+    {
+      "id": "BRA",
+      "name": "Brazil",
+      "nameCn": "巴西",
+      "flag": "🇧🇷",
+      "group": "C",
+      "elo": 2020,
+      "host": false,
+      "rank": 5
+    },
+    {
+      "id": "MAR",
+      "name": "Morocco",
+      "nameCn": "摩洛哥",
+      "flag": "🇲🇦",
+      "group": "C",
+      "elo": 1880,
+      "host": false,
+      "rank": 12
+    },
+    {
+      "id": "HAI",
+      "name": "Haiti",
+      "nameCn": "海地",
+      "flag": "🇭🇹",
+      "group": "C",
+      "elo": 1600,
+      "host": false,
+      "rank": 84
+    },
+    {
+      "id": "SCO",
+      "name": "Scotland",
+      "nameCn": "苏格兰",
+      "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+      "group": "C",
+      "elo": 1800,
+      "host": false,
+      "rank": 38
+    },
+    {
+      "id": "USA",
+      "name": "USA",
+      "nameCn": "美国",
+      "flag": "🇺🇸",
+      "group": "D",
+      "elo": 1800,
+      "host": true,
+      "rank": 16
+    },
+    {
+      "id": "PAR",
+      "name": "Paraguay",
+      "nameCn": "巴拉圭",
+      "flag": "🇵🇾",
+      "group": "D",
+      "elo": 1750,
+      "host": false,
+      "rank": 39
+    },
+    {
+      "id": "AUS",
+      "name": "Australia",
+      "nameCn": "澳大利亚",
+      "flag": "🇦🇺",
+      "group": "D",
+      "elo": 1760,
+      "host": false,
+      "rank": 26
+    },
+    {
+      "id": "TUR",
+      "name": "Türkiye",
+      "nameCn": "土耳其",
+      "flag": "🇹🇷",
+      "group": "D",
+      "elo": 1830,
+      "host": false,
+      "rank": 27
+    },
+    {
+      "id": "GER",
+      "name": "Germany",
+      "nameCn": "德国",
+      "flag": "🇩🇪",
+      "group": "E",
+      "elo": 1960,
+      "host": false,
+      "rank": 9
+    },
+    {
+      "id": "CUW",
+      "name": "Curaçao",
+      "nameCn": "库拉索",
+      "flag": "🇨🇼",
+      "group": "E",
+      "elo": 1580,
+      "host": false,
+      "rank": 82
+    },
+    {
+      "id": "CIV",
+      "name": "Côte d'Ivoire",
+      "nameCn": "科特迪瓦",
+      "flag": "🇨🇮",
+      "group": "E",
+      "elo": 1820,
+      "host": false,
+      "rank": 40
+    },
+    {
+      "id": "ECU",
+      "name": "Ecuador",
+      "nameCn": "厄瓜多尔",
+      "flag": "🇪🇨",
+      "group": "E",
+      "elo": 1835,
+      "host": false,
+      "rank": 24
+    },
+    {
+      "id": "NED",
+      "name": "Netherlands",
+      "nameCn": "荷兰",
+      "flag": "🇳🇱",
+      "group": "F",
+      "elo": 2010,
+      "host": false,
+      "rank": 7
+    },
+    {
+      "id": "JPN",
+      "name": "Japan",
+      "nameCn": "日本",
+      "flag": "🇯🇵",
+      "group": "F",
+      "elo": 1850,
+      "host": false,
+      "rank": 17
+    },
+    {
+      "id": "SWE",
+      "name": "Sweden",
+      "nameCn": "瑞典",
+      "flag": "🇸🇪",
+      "group": "F",
+      "elo": 1820,
+      "host": false,
+      "rank": 36
+    },
+    {
+      "id": "TUN",
+      "name": "Tunisia",
+      "nameCn": "突尼斯",
+      "flag": "🇹🇳",
+      "group": "F",
+      "elo": 1700,
+      "host": false,
+      "rank": 49
+    },
+    {
+      "id": "BEL",
+      "name": "Belgium",
+      "nameCn": "比利时",
+      "flag": "🇧🇪",
+      "group": "G",
+      "elo": 1950,
+      "host": false,
+      "rank": 8
+    },
+    {
+      "id": "EGY",
+      "name": "Egypt",
+      "nameCn": "埃及",
+      "flag": "🇪🇬",
+      "group": "G",
+      "elo": 1780,
+      "host": false,
+      "rank": 34
+    },
+    {
+      "id": "IRN",
+      "name": "IR Iran",
+      "nameCn": "伊朗",
+      "flag": "🇮🇷",
+      "group": "G",
+      "elo": 1800,
+      "host": false,
+      "rank": 21
+    },
+    {
+      "id": "NZL",
+      "name": "New Zealand",
+      "nameCn": "新西兰",
+      "flag": "🇳🇿",
+      "group": "G",
+      "elo": 1620,
+      "host": false,
+      "rank": 86
+    },
+    {
+      "id": "ESP",
+      "name": "Spain",
+      "nameCn": "西班牙",
+      "flag": "🇪🇸",
+      "group": "H",
+      "elo": 2120,
+      "host": false,
+      "rank": 1
+    },
+    {
+      "id": "CPV",
+      "name": "Cabo Verde",
+      "nameCn": "佛得角",
+      "flag": "🇨🇻",
+      "group": "H",
+      "elo": 1610,
+      "host": false,
+      "rank": 70
+    },
+    {
+      "id": "KSA",
+      "name": "Saudi Arabia",
+      "nameCn": "沙特阿拉伯",
+      "flag": "🇸🇦",
+      "group": "H",
+      "elo": 1680,
+      "host": false,
+      "rank": 58
+    },
+    {
+      "id": "URU",
+      "name": "Uruguay",
+      "nameCn": "乌拉圭",
+      "flag": "🇺🇾",
+      "group": "H",
+      "elo": 1930,
+      "host": false,
+      "rank": 11
+    },
+    {
+      "id": "FRA",
+      "name": "France",
+      "nameCn": "法国",
+      "flag": "🇫🇷",
+      "group": "I",
+      "elo": 2080,
+      "host": false,
+      "rank": 3
+    },
+    {
+      "id": "SEN",
+      "name": "Senegal",
+      "nameCn": "塞内加尔",
+      "flag": "🇸🇳",
+      "group": "I",
+      "elo": 1855,
+      "host": false,
+      "rank": 18
+    },
+    {
+      "id": "IRQ",
+      "name": "Iraq",
+      "nameCn": "伊拉克",
+      "flag": "🇮🇶",
+      "group": "I",
+      "elo": 1680,
+      "host": false,
+      "rank": 57
+    },
+    {
+      "id": "NOR",
+      "name": "Norway",
+      "nameCn": "挪威",
+      "flag": "🇳🇴",
+      "group": "I",
+      "elo": 1850,
+      "host": false,
+      "rank": 28
+    },
+    {
+      "id": "ARG",
+      "name": "Argentina",
+      "nameCn": "阿根廷",
+      "flag": "🇦🇷",
+      "group": "J",
+      "elo": 2100,
+      "host": false,
+      "rank": 2
+    },
+    {
+      "id": "ALG",
+      "name": "Algeria",
+      "nameCn": "阿尔及利亚",
+      "flag": "🇩🇿",
+      "group": "J",
+      "elo": 1790,
+      "host": false,
+      "rank": 37
+    },
+    {
+      "id": "AUT",
+      "name": "Austria",
+      "nameCn": "奥地利",
+      "flag": "🇦🇹",
+      "group": "J",
+      "elo": 1820,
+      "host": false,
+      "rank": 22
+    },
+    {
+      "id": "JOR",
+      "name": "Jordan",
+      "nameCn": "约旦",
+      "flag": "🇯🇴",
+      "group": "J",
+      "elo": 1640,
+      "host": false,
+      "rank": 62
+    },
+    {
+      "id": "POR",
+      "name": "Portugal",
+      "nameCn": "葡萄牙",
+      "flag": "🇵🇹",
+      "group": "K",
+      "elo": 2000,
+      "host": false,
+      "rank": 6
+    },
+    {
+      "id": "COD",
+      "name": "DR Congo",
+      "nameCn": "刚果(金)",
+      "flag": "🇨🇩",
+      "group": "K",
+      "elo": 1750,
+      "host": false,
+      "rank": 60
+    },
+    {
+      "id": "UZB",
+      "name": "Uzbekistan",
+      "nameCn": "乌兹别克斯坦",
+      "flag": "🇺🇿",
+      "group": "K",
+      "elo": 1680,
+      "host": false,
+      "rank": 54
+    },
+    {
+      "id": "COL",
+      "name": "Colombia",
+      "nameCn": "哥伦比亚",
+      "flag": "🇨🇴",
+      "group": "K",
+      "elo": 1980,
+      "host": false,
+      "rank": 13
+    },
+    {
+      "id": "ENG",
+      "name": "England",
+      "nameCn": "英格兰",
+      "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "group": "L",
+      "elo": 2010,
+      "host": false,
+      "rank": 4
+    },
+    {
+      "id": "CRO",
+      "name": "Croatia",
+      "nameCn": "克罗地亚",
+      "flag": "🇭🇷",
+      "group": "L",
+      "elo": 1900,
+      "host": false,
+      "rank": 10
+    },
+    {
+      "id": "GHA",
+      "name": "Ghana",
+      "nameCn": "加纳",
+      "flag": "🇬🇭",
+      "group": "L",
+      "elo": 1760,
+      "host": false,
+      "rank": 72
+    },
+    {
+      "id": "PAN",
+      "name": "Panama",
+      "nameCn": "巴拿马",
+      "flag": "🇵🇦",
+      "group": "L",
+      "elo": 1680,
+      "host": false,
+      "rank": 42
+    }
   ],
   "groups": {
-    "A": ["MEX", "RSA", "KOR", "CZE"],
-    "B": ["CAN", "BIH", "QAT", "SUI"],
-    "C": ["BRA", "MAR", "HAI", "SCO"],
-    "D": ["USA", "PAR", "AUS", "TUR"],
-    "E": ["GER", "CUW", "CIV", "ECU"],
-    "F": ["NED", "JPN", "SWE", "TUN"],
-    "G": ["BEL", "EGY", "IRN", "NZL"],
-    "H": ["ESP", "CPV", "KSA", "URU"],
-    "I": ["FRA", "SEN", "IRQ", "NOR"],
-    "J": ["ARG", "ALG", "AUT", "JOR"],
-    "K": ["POR", "COD", "UZB", "COL"],
-    "L": ["ENG", "CRO", "GHA", "PAN"]
+    "A": [
+      "MEX",
+      "RSA",
+      "KOR",
+      "CZE"
+    ],
+    "B": [
+      "CAN",
+      "BIH",
+      "QAT",
+      "SUI"
+    ],
+    "C": [
+      "BRA",
+      "MAR",
+      "HAI",
+      "SCO"
+    ],
+    "D": [
+      "USA",
+      "PAR",
+      "AUS",
+      "TUR"
+    ],
+    "E": [
+      "GER",
+      "CUW",
+      "CIV",
+      "ECU"
+    ],
+    "F": [
+      "NED",
+      "JPN",
+      "SWE",
+      "TUN"
+    ],
+    "G": [
+      "BEL",
+      "EGY",
+      "IRN",
+      "NZL"
+    ],
+    "H": [
+      "ESP",
+      "CPV",
+      "KSA",
+      "URU"
+    ],
+    "I": [
+      "FRA",
+      "SEN",
+      "IRQ",
+      "NOR"
+    ],
+    "J": [
+      "ARG",
+      "ALG",
+      "AUT",
+      "JOR"
+    ],
+    "K": [
+      "POR",
+      "COD",
+      "UZB",
+      "COL"
+    ],
+    "L": [
+      "ENG",
+      "CRO",
+      "GHA",
+      "PAN"
+    ]
   },
   "matchdayWindows": {
-    "1": { "start": "2026-06-11", "end": "2026-06-17" },
-    "2": { "start": "2026-06-18", "end": "2026-06-23" },
-    "3": { "start": "2026-06-24", "end": "2026-06-27" }
+    "1": {
+      "start": "2026-06-11",
+      "end": "2026-06-17"
+    },
+    "2": {
+      "start": "2026-06-18",
+      "end": "2026-06-23"
+    },
+    "3": {
+      "start": "2026-06-24",
+      "end": "2026-06-27"
+    }
   },
   "knockout": {
-    "rounds": ["R32", "R16", "QF", "SF", "F"],
-    "labels": { "R32": "1/16 决赛", "R16": "1/8 决赛", "QF": "1/4 决赛", "SF": "半决赛", "F": "决赛" },
-    "dates": { "R32": "2026-06-28 ~ 07-03", "R16": "2026-07-04 ~ 07-07", "QF": "2026-07-09 ~ 07-11", "SF": "2026-07-14 ~ 07-15", "F": "2026-07-19" },
+    "rounds": [
+      "R32",
+      "R16",
+      "QF",
+      "SF",
+      "F"
+    ],
+    "labels": {
+      "R32": "1/16 决赛",
+      "R16": "1/8 决赛",
+      "QF": "1/4 决赛",
+      "SF": "半决赛",
+      "F": "决赛"
+    },
+    "dates": {
+      "R32": "2026-06-28 ~ 07-03",
+      "R16": "2026-07-04 ~ 07-07",
+      "QF": "2026-07-09 ~ 07-11",
+      "SF": "2026-07-14 ~ 07-15",
+      "F": "2026-07-19"
+    },
     "r32": [
-      { "m": 73, "home": "2A", "away": "2B", "venue": "洛杉矶" },
-      { "m": 74, "home": "1E", "away": "3:A/B/C/D/F", "venue": "波士顿" },
-      { "m": 75, "home": "1F", "away": "2C", "venue": "瓜达拉哈拉" },
-      { "m": 76, "home": "1C", "away": "2F", "venue": "休斯顿" },
-      { "m": 77, "home": "1I", "away": "3:C/D/F/G/H", "venue": "纽约/新泽西" },
-      { "m": 78, "home": "2E", "away": "2I", "venue": "达拉斯" },
-      { "m": 79, "home": "1A", "away": "3:C/E/F/H/I", "venue": "墨西哥城" },
-      { "m": 80, "home": "1L", "away": "3:E/H/I/J/K", "venue": "亚特兰大" },
-      { "m": 81, "home": "1D", "away": "3:B/E/F/I/J", "venue": "旧金山湾区" },
-      { "m": 82, "home": "1G", "away": "3:A/E/H/I/J", "venue": "西雅图" },
-      { "m": 83, "home": "2K", "away": "2L", "venue": "多伦多" },
-      { "m": 84, "home": "1H", "away": "2J", "venue": "洛杉矶" },
-      { "m": 85, "home": "1B", "away": "3:E/F/G/I/J", "venue": "温哥华" },
-      { "m": 86, "home": "1J", "away": "2H", "venue": "迈阿密" },
-      { "m": 87, "home": "1K", "away": "3:D/E/I/J/L", "venue": "堪萨斯城" },
-      { "m": 88, "home": "2D", "away": "2G", "venue": "费城" }
+      {
+        "m": 73,
+        "home": "2A",
+        "away": "2B",
+        "venue": "洛杉矶"
+      },
+      {
+        "m": 74,
+        "home": "1E",
+        "away": "3:A/B/C/D/F",
+        "venue": "波士顿"
+      },
+      {
+        "m": 75,
+        "home": "1F",
+        "away": "2C",
+        "venue": "瓜达拉哈拉"
+      },
+      {
+        "m": 76,
+        "home": "1C",
+        "away": "2F",
+        "venue": "休斯顿"
+      },
+      {
+        "m": 77,
+        "home": "1I",
+        "away": "3:C/D/F/G/H",
+        "venue": "纽约/新泽西"
+      },
+      {
+        "m": 78,
+        "home": "2E",
+        "away": "2I",
+        "venue": "达拉斯"
+      },
+      {
+        "m": 79,
+        "home": "1A",
+        "away": "3:C/E/F/H/I",
+        "venue": "墨西哥城"
+      },
+      {
+        "m": 80,
+        "home": "1L",
+        "away": "3:E/H/I/J/K",
+        "venue": "亚特兰大"
+      },
+      {
+        "m": 81,
+        "home": "1D",
+        "away": "3:B/E/F/I/J",
+        "venue": "旧金山湾区"
+      },
+      {
+        "m": 82,
+        "home": "1G",
+        "away": "3:A/E/H/I/J",
+        "venue": "西雅图"
+      },
+      {
+        "m": 83,
+        "home": "2K",
+        "away": "2L",
+        "venue": "多伦多"
+      },
+      {
+        "m": 84,
+        "home": "1H",
+        "away": "2J",
+        "venue": "洛杉矶"
+      },
+      {
+        "m": 85,
+        "home": "1B",
+        "away": "3:E/F/G/I/J",
+        "venue": "温哥华"
+      },
+      {
+        "m": 86,
+        "home": "1J",
+        "away": "2H",
+        "venue": "迈阿密"
+      },
+      {
+        "m": 87,
+        "home": "1K",
+        "away": "3:D/E/I/J/L",
+        "venue": "堪萨斯城"
+      },
+      {
+        "m": 88,
+        "home": "2D",
+        "away": "2G",
+        "venue": "费城"
+      }
     ],
     "r32Note": "8 个最好第三名的具体对位，要等 72 场小组赛全部结束后，按 FIFA 规程里 495 种组合方案确定。本对阵图先标出候选来源组。"
   },
   "results": {},
   "venues": {
-    "墨西哥城": { "altitude": 2240, "country": "MEX" },
-    "瓜达拉哈拉": { "altitude": 1566, "country": "MEX" },
-    "蒙特雷": { "altitude": 540, "country": "MEX" },
-    "丹佛": { "altitude": 1609, "country": "USA" },
-    "亚特兰大": { "altitude": 320, "country": "USA" },
-    "洛杉矶": { "altitude": 100, "country": "USA" },
-    "纽约/新泽西": { "altitude": 5, "country": "USA" },
-    "波士顿": { "altitude": 30, "country": "USA" },
-    "休斯顿": { "altitude": 25, "country": "USA" },
-    "达拉斯": { "altitude": 130, "country": "USA" },
-    "迈阿密": { "altitude": 2, "country": "USA" },
-    "费城": { "altitude": 12, "country": "USA" },
-    "堪萨斯城": { "altitude": 270, "country": "USA" },
-    "西雅图": { "altitude": 50, "country": "USA" },
-    "旧金山湾区": { "altitude": 5, "country": "USA" },
-    "多伦多": { "altitude": 76, "country": "CAN" },
-    "温哥华": { "altitude": 70, "country": "CAN" }
+    "墨西哥城": {
+      "altitude": 2240,
+      "country": "MEX"
+    },
+    "瓜达拉哈拉": {
+      "altitude": 1566,
+      "country": "MEX"
+    },
+    "蒙特雷": {
+      "altitude": 540,
+      "country": "MEX"
+    },
+    "丹佛": {
+      "altitude": 1609,
+      "country": "USA"
+    },
+    "亚特兰大": {
+      "altitude": 320,
+      "country": "USA"
+    },
+    "洛杉矶": {
+      "altitude": 100,
+      "country": "USA"
+    },
+    "纽约/新泽西": {
+      "altitude": 5,
+      "country": "USA"
+    },
+    "波士顿": {
+      "altitude": 30,
+      "country": "USA"
+    },
+    "休斯顿": {
+      "altitude": 25,
+      "country": "USA"
+    },
+    "达拉斯": {
+      "altitude": 130,
+      "country": "USA"
+    },
+    "迈阿密": {
+      "altitude": 2,
+      "country": "USA"
+    },
+    "费城": {
+      "altitude": 12,
+      "country": "USA"
+    },
+    "堪萨斯城": {
+      "altitude": 270,
+      "country": "USA"
+    },
+    "西雅图": {
+      "altitude": 50,
+      "country": "USA"
+    },
+    "旧金山湾区": {
+      "altitude": 5,
+      "country": "USA"
+    },
+    "多伦多": {
+      "altitude": 76,
+      "country": "CAN"
+    },
+    "温哥华": {
+      "altitude": 70,
+      "country": "CAN"
+    }
   },
   "teamStrength": {
     "_comment": "attack/defense 进攻防守系数，1.0 = 平均水平，>1 攻强/守强。基于近 24 个月 xG for/against 与 FIFA 排名标定。缺省时由 Elo 推导。",
-    "ESP": { "attack": 1.45, "defense": 1.35 },
-    "ARG": { "attack": 1.40, "defense": 1.32 },
-    "FRA": { "attack": 1.42, "defense": 1.30 },
-    "BRA": { "attack": 1.38, "defense": 1.25 },
-    "ENG": { "attack": 1.30, "defense": 1.28 },
-    "NED": { "attack": 1.32, "defense": 1.22 },
-    "POR": { "attack": 1.40, "defense": 1.15 },
-    "GER": { "attack": 1.28, "defense": 1.18 },
-    "BEL": { "attack": 1.22, "defense": 1.18 },
-    "ITA": { "attack": 1.18, "defense": 1.30 },
-    "CRO": { "attack": 1.10, "defense": 1.20 },
-    "URU": { "attack": 1.20, "defense": 1.20 },
-    "COL": { "attack": 1.18, "defense": 1.18 },
-    "MAR": { "attack": 1.05, "defense": 1.30 },
-    "JPN": { "attack": 1.12, "defense": 1.10 },
-    "SEN": { "attack": 1.10, "defense": 1.12 },
-    "USA": { "attack": 1.00, "defense": 1.00 },
-    "MEX": { "attack": 1.05, "defense": 1.02 },
-    "KOR": { "attack": 1.05, "defense": 0.98 },
-    "ECU": { "attack": 0.95, "defense": 1.10 },
-    "SUI": { "attack": 0.98, "defense": 1.18 },
-    "NOR": { "attack": 1.25, "defense": 0.92 },
-    "AUT": { "attack": 1.05, "defense": 1.05 },
-    "TUR": { "attack": 1.10, "defense": 0.92 },
-    "IRN": { "attack": 0.92, "defense": 1.15 },
-    "AUS": { "attack": 0.92, "defense": 1.05 },
-    "EGY": { "attack": 1.00, "defense": 1.00 },
-    "PAR": { "attack": 0.92, "defense": 1.05 },
-    "SWE": { "attack": 1.02, "defense": 0.98 },
-    "ALG": { "attack": 1.00, "defense": 1.00 },
-    "CIV": { "attack": 1.05, "defense": 0.95 },
-    "SCO": { "attack": 0.95, "defense": 1.00 },
-    "CZE": { "attack": 0.98, "defense": 1.00 },
-    "BIH": { "attack": 0.95, "defense": 0.92 },
-    "RSA": { "attack": 0.88, "defense": 0.95 },
-    "TUN": { "attack": 0.85, "defense": 1.05 },
-    "GHA": { "attack": 0.92, "defense": 0.85 },
-    "COD": { "attack": 0.88, "defense": 0.92 },
-    "QAT": { "attack": 0.82, "defense": 0.92 },
-    "KSA": { "attack": 0.80, "defense": 0.95 },
-    "IRQ": { "attack": 0.78, "defense": 0.92 },
-    "JOR": { "attack": 0.78, "defense": 0.88 },
-    "UZB": { "attack": 0.80, "defense": 0.88 },
-    "PAN": { "attack": 0.82, "defense": 0.85 },
-    "CAN": { "attack": 0.95, "defense": 0.95 },
-    "HAI": { "attack": 0.72, "defense": 0.78 },
-    "CUW": { "attack": 0.70, "defense": 0.75 },
-    "CPV": { "attack": 0.72, "defense": 0.80 },
-    "NZL": { "attack": 0.75, "defense": 0.85 }
+    "ESP": {
+      "attack": 1.301,
+      "defense": 2
+    },
+    "ARG": {
+      "attack": 1.348,
+      "defense": 1.678
+    },
+    "FRA": {
+      "attack": 1.421,
+      "defense": 1.938
+    },
+    "BRA": {
+      "attack": 1.296,
+      "defense": 1.346
+    },
+    "ENG": {
+      "attack": 1.322,
+      "defense": 1.264
+    },
+    "NED": {
+      "attack": 1.425,
+      "defense": 1.285
+    },
+    "POR": {
+      "attack": 1.442,
+      "defense": 1.387
+    },
+    "GER": {
+      "attack": 2,
+      "defense": 1.664
+    },
+    "BEL": {
+      "attack": 1.18,
+      "defense": 1.649
+    },
+    "ITA": {
+      "attack": 1.18,
+      "defense": 1.3
+    },
+    "CRO": {
+      "attack": 0.965,
+      "defense": 0.942
+    },
+    "URU": {
+      "attack": 1.186,
+      "defense": 0.798
+    },
+    "COL": {
+      "attack": 1.157,
+      "defense": 1.199
+    },
+    "MAR": {
+      "attack": 0.969,
+      "defense": 1.23
+    },
+    "JPN": {
+      "attack": 1.138,
+      "defense": 1.124
+    },
+    "SEN": {
+      "attack": 0.977,
+      "defense": 1.327
+    },
+    "USA": {
+      "attack": 1.042,
+      "defense": 0.98
+    },
+    "MEX": {
+      "attack": 0.845,
+      "defense": 1.927
+    },
+    "KOR": {
+      "attack": 1.508,
+      "defense": 0.705
+    },
+    "ECU": {
+      "attack": 1.323,
+      "defense": 1.311
+    },
+    "SUI": {
+      "attack": 1.067,
+      "defense": 1.516
+    },
+    "NOR": {
+      "attack": 1.653,
+      "defense": 0.942
+    },
+    "AUT": {
+      "attack": 1.116,
+      "defense": 0.869
+    },
+    "TUR": {
+      "attack": 1.107,
+      "defense": 0.869
+    },
+    "IRN": {
+      "attack": 0.905,
+      "defense": 0.676
+    },
+    "AUS": {
+      "attack": 0.718,
+      "defense": 0.654
+    },
+    "EGY": {
+      "attack": 0.79,
+      "defense": 1.183
+    },
+    "PAR": {
+      "attack": 0.754,
+      "defense": 0.864
+    },
+    "SWE": {
+      "attack": 1.034,
+      "defense": 0.932
+    },
+    "ALG": {
+      "attack": 0.879,
+      "defense": 1.018
+    },
+    "CIV": {
+      "attack": 1.283,
+      "defense": 1.145
+    },
+    "SCO": {
+      "attack": 0.859,
+      "defense": 0.716
+    },
+    "CZE": {
+      "attack": 1.39,
+      "defense": 0.603
+    },
+    "BIH": {
+      "attack": 0.987,
+      "defense": 0.655
+    },
+    "RSA": {
+      "attack": 0.458,
+      "defense": 0.976
+    },
+    "TUN": {
+      "attack": 0.657,
+      "defense": 0.71
+    },
+    "GHA": {
+      "attack": 0.648,
+      "defense": 0.656
+    },
+    "COD": {
+      "attack": 0.68,
+      "defense": 0.722
+    },
+    "QAT": {
+      "attack": 0.416,
+      "defense": 0.643
+    },
+    "KSA": {
+      "attack": 0.807,
+      "defense": 0.483
+    },
+    "IRQ": {
+      "attack": 0.559,
+      "defense": 0.516
+    },
+    "JOR": {
+      "attack": 0.685,
+      "defense": 0.571
+    },
+    "UZB": {
+      "attack": 0.638,
+      "defense": 0.633
+    },
+    "PAN": {
+      "attack": 0.594,
+      "defense": 0.608
+    },
+    "CAN": {
+      "attack": 1.293,
+      "defense": 0.853
+    },
+    "HAI": {
+      "attack": 0.574,
+      "defense": 0.463
+    },
+    "CUW": {
+      "attack": 0.4,
+      "defense": 0.495
+    },
+    "CPV": {
+      "attack": 0.465,
+      "defense": 0.735
+    },
+    "NZL": {
+      "attack": 0.738,
+      "defense": 0.541
+    }
   },
   "keyPlayers": {
     "_comment": "每队头号关键球员（缺阵时 attack 或 defense × 0.85）",
-    "ARG": [{ "name": "Messi", "role": "attack" }],
-    "POR": [{ "name": "B. Fernandes", "role": "attack" }],
-    "FRA": [{ "name": "Mbappé", "role": "attack" }],
-    "ENG": [{ "name": "Bellingham", "role": "attack" }],
-    "BRA": [{ "name": "Vinicius", "role": "attack" }],
-    "NOR": [{ "name": "Haaland", "role": "attack" }],
-    "BEL": [{ "name": "De Bruyne", "role": "attack" }],
-    "ESP": [{ "name": "Rodri", "role": "defense" }],
-    "GER": [{ "name": "Musiala", "role": "attack" }],
-    "NED": [{ "name": "Van Dijk", "role": "defense" }],
-    "CRO": [{ "name": "Modrić", "role": "attack" }],
-    "EGY": [{ "name": "Salah", "role": "attack" }],
-    "KOR": [{ "name": "Son", "role": "attack" }]
+    "ARG": [
+      {
+        "name": "Messi",
+        "role": "attack"
+      }
+    ],
+    "POR": [
+      {
+        "name": "B. Fernandes",
+        "role": "attack"
+      }
+    ],
+    "FRA": [
+      {
+        "name": "Mbappé",
+        "role": "attack"
+      }
+    ],
+    "ENG": [
+      {
+        "name": "Bellingham",
+        "role": "attack"
+      }
+    ],
+    "BRA": [
+      {
+        "name": "Vinicius",
+        "role": "attack"
+      }
+    ],
+    "NOR": [
+      {
+        "name": "Haaland",
+        "role": "attack"
+      }
+    ],
+    "BEL": [
+      {
+        "name": "De Bruyne",
+        "role": "attack"
+      }
+    ],
+    "ESP": [
+      {
+        "name": "Rodri",
+        "role": "defense"
+      }
+    ],
+    "GER": [
+      {
+        "name": "Musiala",
+        "role": "attack"
+      }
+    ],
+    "NED": [
+      {
+        "name": "Van Dijk",
+        "role": "defense"
+      }
+    ],
+    "CRO": [
+      {
+        "name": "Modrić",
+        "role": "attack"
+      }
+    ],
+    "EGY": [
+      {
+        "name": "Salah",
+        "role": "attack"
+      }
+    ],
+    "KOR": [
+      {
+        "name": "Son",
+        "role": "attack"
+      }
+    ]
+  },
+  "teamMap": {
+    "MEX": {
+      "id": "MEX",
+      "name": "Mexico",
+      "nameCn": "墨西哥",
+      "flag": "🇲🇽",
+      "group": "A",
+      "elo": 1820,
+      "host": true,
+      "rank": 14
+    },
+    "RSA": {
+      "id": "RSA",
+      "name": "South Africa",
+      "nameCn": "南非",
+      "flag": "🇿🇦",
+      "group": "A",
+      "elo": 1720,
+      "host": false,
+      "rank": 56
+    },
+    "KOR": {
+      "id": "KOR",
+      "name": "South Korea",
+      "nameCn": "韩国",
+      "flag": "🇰🇷",
+      "group": "A",
+      "elo": 1790,
+      "host": false,
+      "rank": 23
+    },
+    "CZE": {
+      "id": "CZE",
+      "name": "Czechia",
+      "nameCn": "捷克",
+      "flag": "🇨🇿",
+      "group": "A",
+      "elo": 1815,
+      "host": false,
+      "rank": 41
+    },
+    "CAN": {
+      "id": "CAN",
+      "name": "Canada",
+      "nameCn": "加拿大",
+      "flag": "🇨🇦",
+      "group": "B",
+      "elo": 1780,
+      "host": true,
+      "rank": 30
+    },
+    "BIH": {
+      "id": "BIH",
+      "name": "Bosnia & H.",
+      "nameCn": "波黑",
+      "flag": "🇧🇦",
+      "group": "B",
+      "elo": 1710,
+      "host": false,
+      "rank": 64
+    },
+    "QAT": {
+      "id": "QAT",
+      "name": "Qatar",
+      "nameCn": "卡塔尔",
+      "flag": "🇶🇦",
+      "group": "B",
+      "elo": 1680,
+      "host": false,
+      "rank": 52
+    },
+    "SUI": {
+      "id": "SUI",
+      "name": "Switzerland",
+      "nameCn": "瑞士",
+      "flag": "🇨🇭",
+      "group": "B",
+      "elo": 1860,
+      "host": false,
+      "rank": 19
+    },
+    "BRA": {
+      "id": "BRA",
+      "name": "Brazil",
+      "nameCn": "巴西",
+      "flag": "🇧🇷",
+      "group": "C",
+      "elo": 2020,
+      "host": false,
+      "rank": 5
+    },
+    "MAR": {
+      "id": "MAR",
+      "name": "Morocco",
+      "nameCn": "摩洛哥",
+      "flag": "🇲🇦",
+      "group": "C",
+      "elo": 1880,
+      "host": false,
+      "rank": 12
+    },
+    "HAI": {
+      "id": "HAI",
+      "name": "Haiti",
+      "nameCn": "海地",
+      "flag": "🇭🇹",
+      "group": "C",
+      "elo": 1600,
+      "host": false,
+      "rank": 84
+    },
+    "SCO": {
+      "id": "SCO",
+      "name": "Scotland",
+      "nameCn": "苏格兰",
+      "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+      "group": "C",
+      "elo": 1800,
+      "host": false,
+      "rank": 38
+    },
+    "USA": {
+      "id": "USA",
+      "name": "USA",
+      "nameCn": "美国",
+      "flag": "🇺🇸",
+      "group": "D",
+      "elo": 1800,
+      "host": true,
+      "rank": 16
+    },
+    "PAR": {
+      "id": "PAR",
+      "name": "Paraguay",
+      "nameCn": "巴拉圭",
+      "flag": "🇵🇾",
+      "group": "D",
+      "elo": 1750,
+      "host": false,
+      "rank": 39
+    },
+    "AUS": {
+      "id": "AUS",
+      "name": "Australia",
+      "nameCn": "澳大利亚",
+      "flag": "🇦🇺",
+      "group": "D",
+      "elo": 1760,
+      "host": false,
+      "rank": 26
+    },
+    "TUR": {
+      "id": "TUR",
+      "name": "Türkiye",
+      "nameCn": "土耳其",
+      "flag": "🇹🇷",
+      "group": "D",
+      "elo": 1830,
+      "host": false,
+      "rank": 27
+    },
+    "GER": {
+      "id": "GER",
+      "name": "Germany",
+      "nameCn": "德国",
+      "flag": "🇩🇪",
+      "group": "E",
+      "elo": 1960,
+      "host": false,
+      "rank": 9
+    },
+    "CUW": {
+      "id": "CUW",
+      "name": "Curaçao",
+      "nameCn": "库拉索",
+      "flag": "🇨🇼",
+      "group": "E",
+      "elo": 1580,
+      "host": false,
+      "rank": 82
+    },
+    "CIV": {
+      "id": "CIV",
+      "name": "Côte d'Ivoire",
+      "nameCn": "科特迪瓦",
+      "flag": "🇨🇮",
+      "group": "E",
+      "elo": 1820,
+      "host": false,
+      "rank": 40
+    },
+    "ECU": {
+      "id": "ECU",
+      "name": "Ecuador",
+      "nameCn": "厄瓜多尔",
+      "flag": "🇪🇨",
+      "group": "E",
+      "elo": 1835,
+      "host": false,
+      "rank": 24
+    },
+    "NED": {
+      "id": "NED",
+      "name": "Netherlands",
+      "nameCn": "荷兰",
+      "flag": "🇳🇱",
+      "group": "F",
+      "elo": 2010,
+      "host": false,
+      "rank": 7
+    },
+    "JPN": {
+      "id": "JPN",
+      "name": "Japan",
+      "nameCn": "日本",
+      "flag": "🇯🇵",
+      "group": "F",
+      "elo": 1850,
+      "host": false,
+      "rank": 17
+    },
+    "SWE": {
+      "id": "SWE",
+      "name": "Sweden",
+      "nameCn": "瑞典",
+      "flag": "🇸🇪",
+      "group": "F",
+      "elo": 1820,
+      "host": false,
+      "rank": 36
+    },
+    "TUN": {
+      "id": "TUN",
+      "name": "Tunisia",
+      "nameCn": "突尼斯",
+      "flag": "🇹🇳",
+      "group": "F",
+      "elo": 1700,
+      "host": false,
+      "rank": 49
+    },
+    "BEL": {
+      "id": "BEL",
+      "name": "Belgium",
+      "nameCn": "比利时",
+      "flag": "🇧🇪",
+      "group": "G",
+      "elo": 1950,
+      "host": false,
+      "rank": 8
+    },
+    "EGY": {
+      "id": "EGY",
+      "name": "Egypt",
+      "nameCn": "埃及",
+      "flag": "🇪🇬",
+      "group": "G",
+      "elo": 1780,
+      "host": false,
+      "rank": 34
+    },
+    "IRN": {
+      "id": "IRN",
+      "name": "IR Iran",
+      "nameCn": "伊朗",
+      "flag": "🇮🇷",
+      "group": "G",
+      "elo": 1800,
+      "host": false,
+      "rank": 21
+    },
+    "NZL": {
+      "id": "NZL",
+      "name": "New Zealand",
+      "nameCn": "新西兰",
+      "flag": "🇳🇿",
+      "group": "G",
+      "elo": 1620,
+      "host": false,
+      "rank": 86
+    },
+    "ESP": {
+      "id": "ESP",
+      "name": "Spain",
+      "nameCn": "西班牙",
+      "flag": "🇪🇸",
+      "group": "H",
+      "elo": 2120,
+      "host": false,
+      "rank": 1
+    },
+    "CPV": {
+      "id": "CPV",
+      "name": "Cabo Verde",
+      "nameCn": "佛得角",
+      "flag": "🇨🇻",
+      "group": "H",
+      "elo": 1610,
+      "host": false,
+      "rank": 70
+    },
+    "KSA": {
+      "id": "KSA",
+      "name": "Saudi Arabia",
+      "nameCn": "沙特阿拉伯",
+      "flag": "🇸🇦",
+      "group": "H",
+      "elo": 1680,
+      "host": false,
+      "rank": 58
+    },
+    "URU": {
+      "id": "URU",
+      "name": "Uruguay",
+      "nameCn": "乌拉圭",
+      "flag": "🇺🇾",
+      "group": "H",
+      "elo": 1930,
+      "host": false,
+      "rank": 11
+    },
+    "FRA": {
+      "id": "FRA",
+      "name": "France",
+      "nameCn": "法国",
+      "flag": "🇫🇷",
+      "group": "I",
+      "elo": 2080,
+      "host": false,
+      "rank": 3
+    },
+    "SEN": {
+      "id": "SEN",
+      "name": "Senegal",
+      "nameCn": "塞内加尔",
+      "flag": "🇸🇳",
+      "group": "I",
+      "elo": 1855,
+      "host": false,
+      "rank": 18
+    },
+    "IRQ": {
+      "id": "IRQ",
+      "name": "Iraq",
+      "nameCn": "伊拉克",
+      "flag": "🇮🇶",
+      "group": "I",
+      "elo": 1680,
+      "host": false,
+      "rank": 57
+    },
+    "NOR": {
+      "id": "NOR",
+      "name": "Norway",
+      "nameCn": "挪威",
+      "flag": "🇳🇴",
+      "group": "I",
+      "elo": 1850,
+      "host": false,
+      "rank": 28
+    },
+    "ARG": {
+      "id": "ARG",
+      "name": "Argentina",
+      "nameCn": "阿根廷",
+      "flag": "🇦🇷",
+      "group": "J",
+      "elo": 2100,
+      "host": false,
+      "rank": 2
+    },
+    "ALG": {
+      "id": "ALG",
+      "name": "Algeria",
+      "nameCn": "阿尔及利亚",
+      "flag": "🇩🇿",
+      "group": "J",
+      "elo": 1790,
+      "host": false,
+      "rank": 37
+    },
+    "AUT": {
+      "id": "AUT",
+      "name": "Austria",
+      "nameCn": "奥地利",
+      "flag": "🇦🇹",
+      "group": "J",
+      "elo": 1820,
+      "host": false,
+      "rank": 22
+    },
+    "JOR": {
+      "id": "JOR",
+      "name": "Jordan",
+      "nameCn": "约旦",
+      "flag": "🇯🇴",
+      "group": "J",
+      "elo": 1640,
+      "host": false,
+      "rank": 62
+    },
+    "POR": {
+      "id": "POR",
+      "name": "Portugal",
+      "nameCn": "葡萄牙",
+      "flag": "🇵🇹",
+      "group": "K",
+      "elo": 2000,
+      "host": false,
+      "rank": 6
+    },
+    "COD": {
+      "id": "COD",
+      "name": "DR Congo",
+      "nameCn": "刚果(金)",
+      "flag": "🇨🇩",
+      "group": "K",
+      "elo": 1750,
+      "host": false,
+      "rank": 60
+    },
+    "UZB": {
+      "id": "UZB",
+      "name": "Uzbekistan",
+      "nameCn": "乌兹别克斯坦",
+      "flag": "🇺🇿",
+      "group": "K",
+      "elo": 1680,
+      "host": false,
+      "rank": 54
+    },
+    "COL": {
+      "id": "COL",
+      "name": "Colombia",
+      "nameCn": "哥伦比亚",
+      "flag": "🇨🇴",
+      "group": "K",
+      "elo": 1980,
+      "host": false,
+      "rank": 13
+    },
+    "ENG": {
+      "id": "ENG",
+      "name": "England",
+      "nameCn": "英格兰",
+      "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "group": "L",
+      "elo": 2010,
+      "host": false,
+      "rank": 4
+    },
+    "CRO": {
+      "id": "CRO",
+      "name": "Croatia",
+      "nameCn": "克罗地亚",
+      "flag": "🇭🇷",
+      "group": "L",
+      "elo": 1900,
+      "host": false,
+      "rank": 10
+    },
+    "GHA": {
+      "id": "GHA",
+      "name": "Ghana",
+      "nameCn": "加纳",
+      "flag": "🇬🇭",
+      "group": "L",
+      "elo": 1760,
+      "host": false,
+      "rank": 72
+    },
+    "PAN": {
+      "id": "PAN",
+      "name": "Panama",
+      "nameCn": "巴拿马",
+      "flag": "🇵🇦",
+      "group": "L",
+      "elo": 1680,
+      "host": false,
+      "rank": 42
+    }
   }
 }

@@ -21,6 +21,7 @@ export function renderValuebets(root, data, ctx) {
     kellyFraction: 0.25,
     minEdge: 0.03,
     maxStakePct: 0.05,
+    maxOdds: 15,
     ...loadSettings(),
   };
 
@@ -49,6 +50,7 @@ export function renderValuebets(root, data, ctx) {
           </select>
         </label>
         <label>最小 edge：<input type="number" id="minEdge" value="${(settings.minEdge*100).toFixed(1)}" min="0" step="0.5" style="width:60px">%</label>
+        <label>最大赔率：<input type="number" id="maxOdds" value="${settings.maxOdds}" min="1.5" step="0.5" style="width:60px"></label>
         <button class="ghost-btn" id="recalcBtn">重新计算</button>
       </div>
     </div>
@@ -64,6 +66,7 @@ export function renderValuebets(root, data, ctx) {
     settings.bankroll = +$('#bankroll').value || 1000;
     settings.kellyFraction = +$('#kellyFrac').value;
     settings.minEdge = (+$('#minEdge').value || 3) / 100;
+    settings.maxOdds = +$('#maxOdds').value || 15;
     saveSettings(settings);
     draw();
   }
@@ -210,6 +213,10 @@ node scripts/sync-odds.mjs</pre>
       '【分数 Kelly】',
       '完整 Kelly 对概率估计误差极敏感（差 5% 可能差 50% 仓位）。',
       '业界默认用 1/4 Kelly 折扣，长期增长率打 75% 但回撤显著降低。',
+      '',
+      '【风控过滤】',
+      '最大赔率默认 15（概率 >6.7%）：过滤极端薄市场（弱队爆冷 @50+），',
+      '这些市场流动性差、variance 极大、模型小误差被 edge 公式放大成虚假信号。',
       '',
       '【市场数据来源】',
       'the-odds-api 聚合 Pinnacle、Bet365、DraftKings 等多家 bookmaker。',

@@ -50,6 +50,9 @@ export function predictEnsemble(home, away, opts = {}) {
   const homeAdvElo = isHostMatch ? 100 : 0;
   const homeAdvDC  = isHostMatch ? 1.25 : 1.0;
 
+  // 校准后的总进球基准（默认 1.35，可由 scripts/calibrate.mjs 写到 meta.leagueAvg）
+  const leagueAvg = data?.meta?.leagueAvg || 1.35;
+
   // --- A. Elo-Poisson ---
   const predA = poissonPredict(home.elo, away.elo, homeAdvElo);
 
@@ -60,11 +63,12 @@ export function predictEnsemble(home, away, opts = {}) {
     homeAdvantage: homeAdvDC,
     altitudeAdj: altAdj,
     keyOut,
+    leagueAvg,
   });
 
   // --- C. 纯 xG 独立泊松（用 attack/defense 直接算 λ）---
-  const lambdaHC = 1.35 * hs.attack / as_.defense * homeAdvDC * altAdj.home;
-  const lambdaAC = 1.35 * as_.attack / hs.defense / Math.sqrt(homeAdvDC) * altAdj.away;
+  const lambdaHC = leagueAvg * hs.attack / as_.defense * homeAdvDC * altAdj.home;
+  const lambdaAC = leagueAvg * as_.attack / hs.defense / Math.sqrt(homeAdvDC) * altAdj.away;
   const predC = predictFromXG(
     Math.max(0.15, Math.min(5.5, lambdaHC)),
     Math.max(0.15, Math.min(5.5, lambdaAC)),

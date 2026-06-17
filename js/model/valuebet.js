@@ -22,6 +22,7 @@ const DEFAULTS = {
   kellyFraction: 0.25,   // 1/4 Kelly
   maxStakePct: 0.05,     // 单注最多 5% bankroll
   minEdge: 0.03,         // 最小 edge 3%
+  maxOdds: 15,           // 最大赔率 15（概率 >6.7%），过滤极端薄市场
 };
 
 /**
@@ -122,6 +123,8 @@ function evaluate(name, marketP, modelP, marketOdds, bankroll, cfg, market, extr
   // 防御
   if (!marketP || !modelP || marketP <= 0 || modelP <= 0) return null;
   if (!marketOdds || marketOdds <= 1) return null;
+  // 极端赔率过滤：高赔率 = 薄市场 + 高 variance + 模型小误差被 edge 公式放大
+  if (cfg.maxOdds && marketOdds > cfg.maxOdds) return null;
 
   const edge = modelP / marketP - 1;
   if (edge < cfg.minEdge) return null;
