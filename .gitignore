@@ -8,6 +8,7 @@ Thumbs.db
 # 编辑器
 .vscode/
 .idea/
+.claude/
 *.swp
 
 # 依赖（本项目无后端依赖，预留）

@@ -1,7 +1,8 @@
-// ===== 泊松模型：从预期进球数 → 比分概率分布 =====
-// 核心：泊松分布描述"单位时间内随机事件发生次数"，
-// 非常适合足球进球。已知两队预期进球数 λh、λa，
-// 即可算出任意比分 (h-a) 的概率：P(h)×P(a)。
+// ===== 独立泊松模型（基线）=====
+// 经典 Elo → xG → Poisson 三段式。保留为：
+//   1) 集成模型中的一个"基线"成员（与 Dixon-Coles、xG 模型加权平均）
+//   2) 老代码 / 简单场景的向后兼容入口
+// 复杂场景请用 dixonColes.js 或 ensemble.js。
 
 import { expectedGoals } from './elo.js';
 
@@ -11,21 +12,25 @@ function factorial(n) {
   return r;
 }
 
-// 单队进 k 球的概率
 function poisson(k, lambda) {
   return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
 }
 
-const MAX = 6; // 计算到 6 球，足够覆盖绝大多数情况
+const MAX = 7;
 
 /**
- * 完整预测一场比赛
- * @returns { win, draw, lose, xg:{home,away}, top, grid, mostLikely }
+ * 独立泊松预测（从 Elo 推 xG）
+ * @returns { model, win, draw, lose, xg:{home,away}, top, grid, mostLikely }
  */
 export function predict(eloHome, eloAway, homeAdvantage = 0) {
   const { homeXG, awayXG } = expectedGoals(eloHome, eloAway, homeAdvantage);
+  return predictFromXG(homeXG, awayXG);
+}
 
-  // 构建比分概率矩阵 grid[h][a]
+/**
+ * 直接从给定 xG 预测（供其他模型/外部 xG 数据复用）
+ */
+export function predictFromXG(homeXG, awayXG) {
   const grid = [];
   let win = 0, draw = 0, lose = 0;
   const scorelines = [];
@@ -42,25 +47,23 @@ export function predict(eloHome, eloAway, homeAdvantage = 0) {
     }
   }
 
-  // 归一化（截断 MAX 会导致三者之和略小于 1）
   const sum = win + draw + lose;
   win /= sum; draw /= sum; lose /= sum;
-
+  for (let h = 0; h <= MAX; h++) for (let a = 0; a <= MAX; a++) grid[h][a] /= sum;
+  scorelines.forEach(s => s.p /= sum);
   scorelines.sort((x, y) => y.p - x.p);
-  const top = scorelines.slice(0, 6).map(s => ({ ...s, p: s.p / sum }));
 
   return {
+    model: 'poisson',
     xg: { home: homeXG, away: awayXG },
     win, draw, lose,
-    top,
+    top: scorelines.slice(0, 6),
     grid,
-    mostLikely: top[0],
+    mostLikely: scorelines[0],
   };
 }
 
-// 模拟一场比赛结果（用于淘汰赛推进），返回 0/1 主队是否晋级，平局时按概率随机
+// 已弃用：旧的 simulateOutcome（淘汰赛用），新代码请用 monteCarlo.js
 export function simulateOutcome(pred) {
-  // 用累积分布 + Math.random 选比分；淘汰赛无平局，平局时用胜率加权重抽
-  // 但这里淘汰赛阶段我们用"最可能胜方"简化（在 app 层用）
   return pred.win >= pred.lose;
 }
