@@ -37,15 +37,18 @@ export function findValueBets(match, pred, opts = {}) {
   const bankroll = cfg.bankroll || 1000;
   const consensus = marketConsensus(match);
   const bets = [];
+  // 显示用队名：优先中文（由视图传入 homeNameCn/awayNameCn），回退到 API 英文名
+  const hn = match.homeNameCn || match.homeName;
+  const an = match.awayNameCn || match.awayName;
 
   // --- 1. h2h 三路（胜平负）---
   if (consensus.h2h) {
     const candidates = [
-      { name: `${match.homeName} 胜`, marketP: consensus.h2h.home, modelP: pred.win,
+      { name: `${hn} 胜`, marketP: consensus.h2h.home, modelP: pred.win,
         marketOdds: 1 / consensus.h2h.home },
       { name: `平局`, marketP: consensus.h2h.draw, modelP: pred.draw,
         marketOdds: 1 / consensus.h2h.draw },
-      { name: `${match.awayName} 胜`, marketP: consensus.h2h.away, modelP: pred.lose,
+      { name: `${an} 胜`, marketP: consensus.h2h.away, modelP: pred.lose,
         marketOdds: 1 / consensus.h2h.away },
     ];
     for (const c of candidates) {
@@ -89,8 +92,8 @@ export function findValueBets(match, pred, opts = {}) {
     // push 概率按 0.5 平分（实际退本金，简化处理）
     pHome += pPush / 2; pAway += pPush / 2;
 
-    const homeBet = evaluate(`${match.homeName} 让 ${s.point}`, s.home, pHome, s.homeOdds, bankroll, cfg, 'spreads', { point: s.point });
-    const awayBet = evaluate(`${match.awayName} 让 ${-s.point}`, s.away, pAway, s.awayOdds, bankroll, cfg, 'spreads', { point: -s.point });
+    const homeBet = evaluate(`${hn} 让 ${s.point}`, s.home, pHome, s.homeOdds, bankroll, cfg, 'spreads', { point: s.point });
+    const awayBet = evaluate(`${an} 让 ${-s.point}`, s.away, pAway, s.awayOdds, bankroll, cfg, 'spreads', { point: -s.point });
     if (homeBet) bets.push(homeBet);
     if (awayBet) bets.push(awayBet);
   }
@@ -104,7 +107,8 @@ export function findValueBets(match, pred, opts = {}) {
   const roi = totalStake > 0 ? expectedReturn / totalStake : 0;
 
   return {
-    match: { homeName: match.homeName, awayName: match.awayName,
+    match: { homeName: hn, awayName: an,
+             homeNameEn: match.homeName, awayNameEn: match.awayName,
              homeId: match.homeId, awayId: match.awayId,
              commenceTime: match.commenceTime },
     bets,
@@ -165,3 +169,58 @@ function evaluate(name, marketP, modelP, marketOdds, bankroll, cfg, market, extr
 }
 
 export { DEFAULTS };
+
+// ===== 日预算约束下的资金分配 =====
+// 小额日预算（如 20 元）下，纯 Kelly 单注仓位太小（¥1-2，低于最小下注额）。
+// 改成在"日预算"上按策略分配，让每注达到可下注的金额。
+//
+// 三种策略：
+//   proportional — 按 Kelly 相对权重分配，分散到多个高价值投注（单注上限 50%）
+//   concentrated — 全部押 edge 最高的一注（高回报高波动）
+//   fixed       — 每注固定金额，按 edge 从高到低投到预算用完
+//
+// @param bets   findValueBets 收集的所有候选（用其 edge / kellyRaw 字段）
+// @param budget 日预算（如 20）
+// @param strategy 'proportional' | 'concentrated' | 'fixed'
+export function allocateBudget(bets, budget, strategy = 'proportional', opts = {}) {
+  if (!bets.length || budget <= 0) return [];
+  const sorted = [...bets].sort((a, b) => b.edge - a.edge);
+  const perBet = opts.perBet || 5;
+  const maxBets = opts.maxBets || 6;
+  const cap = opts.cap || 0.5;
+
+  if (strategy === 'concentrated') {
+    const top = sorted[0];
+    return [{ ...top, stake: budget, stakePct: 1, strategy }];
+  }
+
+  if (strategy === 'fixed') {
+    let remaining = budget;
+    const out = [];
+    for (const b of sorted) {
+      if (remaining < perBet) break;
+      out.push({ ...b, stake: perBet, stakePct: perBet / budget, strategy });
+      remaining -= perBet;
+    }
+    return out;
+  }
+
+  // proportional：取 top N，按 kellyRaw 归一化分配，单注 cap 上限
+  const top = sorted.slice(0, maxBets);
+  const minBet = opts.minBet || 2;          // 最小下注额，低于此不投（菠菜实务）
+  const totalK = top.reduce((s, b) => s + Math.max(0, b.kellyRaw || 0), 0);
+  const out = [];
+  let used = 0;
+  for (const b of top) {
+    const k = Math.max(0, b.kellyRaw || 0);
+    let stake = totalK > 0 ? budget * (k / totalK) : budget / top.length;
+    stake = Math.min(stake, budget * cap);
+    stake = Math.round(stake);
+    if (stake < minBet) continue;            // 太小不投，预算留给其他注
+    if (used + stake > budget) stake = budget - used;
+    if (stake < minBet) break;
+    out.push({ ...b, stake, stakePct: stake / budget, strategy });
+    used += stake;
+  }
+  return out;
+}
