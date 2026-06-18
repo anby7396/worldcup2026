@@ -71,6 +71,13 @@ function matchHtml(match, data, thirds) {
   </div>`;
 }
 
+// 判断比赛属于哪个半区（前半上半区、后半下半区）
+// R32:[0-7]=上,[8-15]=下  R16:[0-3]=上,[4-7]=下  QF:[0-1]=上,[2-3]=下  SF:[0]=上,[1]=下
+function halfZone(round, index, total) {
+  if (round === 'F' || round === 'TP') return null;
+  return index < total / 2 ? 'upper' : 'lower';
+}
+
 export function renderBracket(root, data) {
   const ko = data.results?.knockout;
   const thirds = computeThirdPlaceRanking(data);
@@ -84,15 +91,35 @@ export function renderBracket(root, data) {
   const cols = rounds.filter(r => ko[r] && ko[r].length).map(r => `
     <div class="bracket-col">
       <h4>${ROUND_LABEL[r]}<small>${ROUND_DATE[r]} · ${ko[r].length}场</small></h4>
-      ${ko[r].map(m => matchHtml(m, data, thirds)).join('')}
+      ${ko[r].map((m, i) => {
+        const zone = halfZone(r, i, ko[r].length);
+        const zoneTag = zone ? `<span class="zone-tag zone-${zone}">${zone === 'upper' ? '上半区' : '下半区'}</span>` : '';
+        return zoneTag + matchHtml(m, data, thirds);
+      }).join('')}
     </div>`).join('');
 
   const koDone = Object.values(ko).flat().filter(m => m.done).length;
+  // 上半区/下半区的代表队（从 R32 推导）
+  const r32 = ko.R32;
+  const upperTeams = r32.slice(0, 8).map(m => describeSlot(m.home, m.homeReal, m.homeName, data, thirds).name + ' vs ' + describeSlot(m.away, m.awayReal, m.awayName, data, thirds).name);
+  const lowerTeams = r32.slice(8, 16).map(m => describeSlot(m.home, m.homeReal, m.homeName, data, thirds).name + ' vs ' + describeSlot(m.away, m.awayReal, m.awayName, data, thirds).name);
 
   root.innerHTML = `
     <div class="view-head">
       <h2>淘汰赛对阵图</h2>
-      <p>对阵来自 ESPN 同步（含 495 种第三名对位预案，由 FIFA 自动确定）。小组赛结果会自动填入 1A/2A 等位置；淘汰赛开踢后比分自动显示。</p>
+      <p>48 队 → 32 队淘汰赛。前 2 名 + 8 个最佳第三名晋级，分<strong>上半区</strong>和<strong>下半区</strong>两条通道，
+        各自决出一个决赛名额。西班牙与阿根廷被安排在不同半区（FIFA 排名保护），最早只能在决赛相遇。</p>
+    </div>
+
+    <div class="zone-summary">
+      <div class="zone-card zone-upper-card">
+        <h4>🔺 上半区（${r32.length >= 8 ? '8 场 1/16 决赛' : ''}）</h4>
+        <div class="zone-desc">对阵通道：1/16 → 1/8 → 1/4 → 半决赛 → 决赛</div>
+      </div>
+      <div class="zone-card zone-lower-card">
+        <h4>🔻 下半区（${r32.length >= 16 ? '8 场 1/16 决赛' : ''}）</h4>
+        <div class="zone-desc">对阵通道：1/16 → 1/8 → 1/4 → 半决赛 → 决赛</div>
+      </div>
     </div>
 
     <div class="bracket-wrap">
@@ -100,12 +127,14 @@ export function renderBracket(root, data) {
     </div>
 
     <div class="bracket-note">
-      <b>📌 阅读说明</b><br>
-      • <code style="color:var(--accent)">小组X第N</code>：占位符，等小组赛出结果自动替换为真实球队（绿色国旗 = 已推导出真实队）<br>
-      • <code style="color:var(--accent-2)">1/16决赛胜者 / 半决赛胜者</code> 等：晋级占位，等上一轮踢完自动替换<br>
-      • <b>最好的第三名</b>：12 个小组第三取前 8，对阵哪个小组第一由 FIFA 495 种预案决定，ESPN 会自动给出<br>
-      • 两队都已确定时可点「🔮 预测」分析该场<br>
-      • 已完赛：绿框 + 加粗胜者比分${koDone ? `（当前 ${koDone} 场已完赛）` : '（淘汰赛尚未开始）'}
+      <b>📌 半区与对位说明</b><br>
+      • <span class="zone-tag zone-upper" style="font-size:11px;">上半区</span> 和
+        <span class="zone-tag zone-lower" style="font-size:11px;">下半区</span> 标注了每场比赛所属的半区通道<br>
+      • 1/16 决赛前 8 场 → 上半区，后 8 场 → 下半区，各自独立晋级直到半决赛<br>
+      • 半决赛：上半区胜者 vs 上半区胜者，下半区胜者 vs 下半区胜者，两场胜者会师决赛<br>
+      • 西班牙（FIFA #1）和阿根廷（FIFA #2）被分在不同半区，最早只能在决赛相遇<br>
+      • 两队都已确定时可点「🔮 预测」分析该场
+      ${koDone ? `<br>• 已完赛 <b>${koDone}</b> 场` : '<br>• 淘汰赛尚未开始'}
     </div>
   `;
   bindPredict(root);

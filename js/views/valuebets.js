@@ -6,6 +6,7 @@
 import { predictEnsemble } from '../model/ensemble.js';
 import { jingcaiToConsensus } from '../model/odds.js';
 import { findValueBets, findCRSValueBets, findTTGValueBets, allocateBudget } from '../model/valuebet.js';
+import { matchMotivation } from '../model/motivation.js';
 
 const SETTINGS_KEY = 'wc2026_valuebet_settings_v3';
 
@@ -152,7 +153,9 @@ export function renderValuebets(root, data, ctx) {
 
     for (const m of filtered) {
       const home = data.teamMap[m.homeId], away = data.teamMap[m.awayId];
-      const pred = predictEnsemble(home, away, { data });
+      // 自动应用动机因子：根据每队当前积分/出线形势调整预测
+      const motivation = matchMotivation(data, m.homeId, m.awayId);
+      const pred = predictEnsemble(home, away, { data, motivation });
       const consensus = jingcaiToConsensus(m);
       const mCn = { ...m, homeNameCn: m.homeName, awayNameCn: m.awayName };
       const mInfo = { homeName: m.homeName, awayName: m.awayName, homeId: m.homeId, awayId: m.awayId };

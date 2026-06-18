@@ -49,6 +49,7 @@ const RHO = -0.13;              // Dixon-Coles 修正系数（足球文献典型
  *   altitudeAdj   — { home, away } xG 调整（来自 altitudeAdjust）
  *   keyOut        — { home: 'attack'|'defense'|null, away: ... } 关键球员缺阵
  *   leagueAvg     — 单队预期进球基准，默认 1.35（可由市场大球数据校准）
+ *   motivation    — { home, away } 动机因子（0.88~1.05），直接乘到 λ 上
  */
 export function predictDC(opts) {
   const {
@@ -58,6 +59,7 @@ export function predictDC(opts) {
     altitudeAdj = { home: 1, away: 1 },
     keyOut = { home: null, away: null },
     leagueAvg = LEAGUE_AVG_GOALS,
+    motivation = { home: 1, away: 1 },
   } = opts;
 
   // 应用关键球员缺阵（缺前锋扣 attack，缺后腰/中卫扣 defense）
@@ -70,6 +72,10 @@ export function predictDC(opts) {
   // 防守强 → 让对手少进球，所以用 1/defense
   let lambdaH = leagueAvg * ha * (1 / ad) * homeAdvantage * altitudeAdj.home;
   let lambdaA = leagueAvg * aa * (1 / hd) * (1 / Math.sqrt(homeAdvantage)) * altitudeAdj.away;
+
+  // 动机因子：球队在小组赛不同阶段的全力程度不同（生死战↑ / 已出线轮换↓）
+  lambdaH *= motivation.home;
+  lambdaA *= motivation.away;
 
   lambdaH = Math.max(0.15, Math.min(5.5, lambdaH));
   lambdaA = Math.max(0.15, Math.min(5.5, lambdaA));

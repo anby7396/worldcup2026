@@ -22,6 +22,7 @@ const DEFAULT_WEIGHTS = { elo: 0.25, dc: 0.50, xg: 0.25 };
  *   isHostMatch  — 主队是否在自己国家踢，决定是否给主场加成
  *   keyOut       — { home: 'attack'|'defense'|null, away: ... }
  *   weights      — 自定义权重 { elo, dc, xg }
+ *   motivation   — { home: number, away: number } 动机因子（0.88~1.05），乘到 λ 上
  */
 export function predictEnsemble(home, away, opts = {}) {
   const {
@@ -30,6 +31,7 @@ export function predictEnsemble(home, away, opts = {}) {
     isHostMatch = false,
     keyOut = { home: null, away: null },
     weights = DEFAULT_WEIGHTS,
+    motivation = { home: 1, away: 1 },
   } = opts;
 
   // --- 准备 attack/defense（缺省从 Elo 推） ---
@@ -56,7 +58,7 @@ export function predictEnsemble(home, away, opts = {}) {
   // --- A. Elo-Poisson ---
   const predA = poissonPredict(home.elo, away.elo, homeAdvElo);
 
-  // --- B. Dixon-Coles 双参数 ---
+  // --- B. Dixon-Coles 双参数（motivation 直接乘到 λ）---
   const predB = predictDC({
     homeAttack: hs.attack, homeDefense: hs.defense,
     awayAttack: as_.attack, awayDefense: as_.defense,
@@ -64,11 +66,12 @@ export function predictEnsemble(home, away, opts = {}) {
     altitudeAdj: altAdj,
     keyOut,
     leagueAvg,
+    motivation,  // {home, away} 动机因子，乘到 λ_home/λ_away
   });
 
-  // --- C. 纯 xG 独立泊松（用 attack/defense 直接算 λ）---
-  const lambdaHC = leagueAvg * hs.attack / as_.defense * homeAdvDC * altAdj.home;
-  const lambdaAC = leagueAvg * as_.attack / hs.defense / Math.sqrt(homeAdvDC) * altAdj.away;
+  // --- C. 纯 xG 独立泊松（用 attack/defense 直接算 λ，motivation 直接乘）---
+  const lambdaHC = leagueAvg * hs.attack / as_.defense * homeAdvDC * altAdj.home * motivation.home;
+  const lambdaAC = leagueAvg * as_.attack / hs.defense / Math.sqrt(homeAdvDC) * altAdj.away * motivation.away;
   const predC = predictFromXG(
     Math.max(0.15, Math.min(5.5, lambdaHC)),
     Math.max(0.15, Math.min(5.5, lambdaAC)),
