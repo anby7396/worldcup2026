@@ -41,7 +41,7 @@
       ],
       "note": "FIFA 设置两条半区通道，使排名最高的两队(西班牙、阿根廷)最早只能在决赛相遇。"
     },
-    "leagueAvg": 1.17
+    "leagueAvg": 1.222
   },
   "teams": [
     {
@@ -821,24 +821,24 @@
       "defense": 1.938
     },
     "BRA": {
-      "attack": 1.296,
-      "defense": 1.346
+      "attack": 1.305,
+      "defense": 1.293
     },
     "ENG": {
       "attack": 1.322,
       "defense": 1.264
     },
     "NED": {
-      "attack": 1.425,
-      "defense": 1.285
+      "attack": 1.437,
+      "defense": 1.287
     },
     "POR": {
       "attack": 1.442,
       "defense": 1.387
     },
     "GER": {
-      "attack": 2,
-      "defense": 1.664
+      "attack": 1.944,
+      "defense": 1.736
     },
     "BEL": {
       "attack": 1.18,
@@ -861,36 +861,36 @@
       "defense": 1.199
     },
     "MAR": {
-      "attack": 0.969,
-      "defense": 1.23
+      "attack": 1,
+      "defense": 1.279
     },
     "JPN": {
       "attack": 1.138,
-      "defense": 1.124
+      "defense": 1.087
     },
     "SEN": {
       "attack": 0.977,
       "defense": 1.327
     },
     "USA": {
-      "attack": 1.042,
-      "defense": 0.98
+      "attack": 1.044,
+      "defense": 1.079
     },
     "MEX": {
-      "attack": 0.845,
-      "defense": 1.927
+      "attack": 0.878,
+      "defense": 1.881
     },
     "KOR": {
-      "attack": 1.508,
-      "defense": 0.705
+      "attack": 1.47,
+      "defense": 0.674
     },
     "ECU": {
-      "attack": 1.323,
-      "defense": 1.311
+      "attack": 1.326,
+      "defense": 1.258
     },
     "SUI": {
-      "attack": 1.067,
-      "defense": 1.516
+      "attack": 1.075,
+      "defense": 1.659
     },
     "NOR": {
       "attack": 1.653,
@@ -901,56 +901,56 @@
       "defense": 0.869
     },
     "TUR": {
-      "attack": 1.107,
-      "defense": 0.869
+      "attack": 1.091,
+      "defense": 0.872
     },
     "IRN": {
       "attack": 0.905,
       "defense": 0.676
     },
     "AUS": {
-      "attack": 0.718,
-      "defense": 0.654
+      "attack": 0.629,
+      "defense": 0.64
     },
     "EGY": {
       "attack": 0.79,
       "defense": 1.183
     },
     "PAR": {
-      "attack": 0.754,
-      "defense": 0.864
+      "attack": 0.722,
+      "defense": 0.856
     },
     "SWE": {
-      "attack": 1.034,
-      "defense": 0.932
+      "attack": 0.987,
+      "defense": 0.893
     },
     "ALG": {
       "attack": 0.879,
       "defense": 1.018
     },
     "CIV": {
-      "attack": 1.283,
-      "defense": 1.145
+      "attack": 1.174,
+      "defense": 1.037
     },
     "SCO": {
-      "attack": 0.859,
-      "defense": 0.716
+      "attack": 0.782,
+      "defense": 0.685
     },
     "CZE": {
-      "attack": 1.39,
-      "defense": 0.603
+      "attack": 1.381,
+      "defense": 0.624
     },
     "BIH": {
-      "attack": 0.987,
-      "defense": 0.655
+      "attack": 0.827,
+      "defense": 0.632
     },
     "RSA": {
-      "attack": 0.458,
-      "defense": 0.976
+      "attack": 0.431,
+      "defense": 0.977
     },
     "TUN": {
-      "attack": 0.657,
-      "defense": 0.71
+      "attack": 0.626,
+      "defense": 0.701
     },
     "GHA": {
       "attack": 0.648,
@@ -961,8 +961,8 @@
       "defense": 0.722
     },
     "QAT": {
-      "attack": 0.416,
-      "defense": 0.643
+      "attack": 0.426,
+      "defense": 0.63
     },
     "KSA": {
       "attack": 0.807,
@@ -985,16 +985,16 @@
       "defense": 0.608
     },
     "CAN": {
-      "attack": 1.293,
-      "defense": 0.853
+      "attack": 1.31,
+      "defense": 1.195
     },
     "HAI": {
-      "attack": 0.574,
-      "defense": 0.463
+      "attack": 0.552,
+      "defense": 0.495
     },
     "CUW": {
-      "attack": 0.4,
-      "defense": 0.495
+      "attack": 0.444,
+      "defense": 0.529
     },
     "CPV": {
       "attack": 0.465,

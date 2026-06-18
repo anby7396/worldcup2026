@@ -8,34 +8,35 @@
 //       node scripts/calibrate.mjs --write   # 拟合 + 写回 data/worldcup2026.json
 
 import { readFile, writeFile } from 'fs/promises';
-import { marketConsensus } from '../js/model/odds.js';
+import { jingcaiToConsensus } from '../js/model/odds.js';
 import { predictDC } from '../js/model/dixonColes.js';
 
 const WRITE = process.argv.includes('--write');
 
 const data = JSON.parse(await readFile('data/worldcup2026.json', 'utf8'));
 data.teamMap = Object.fromEntries(data.teams.map(t => [t.id, t]));
-const odds = JSON.parse(await readFile('data/odds.json', 'utf8'));
+const odds = JSON.parse(await readFile('data/odds-jingcai.json', 'utf8'));
 
-// --- 1. 提取每场市场 h2h + totals 概率 ---
+// --- 1. 提取每场竞彩市场 h2h + totals 概率 ---
 const samples = [];               // h2h 样本
-const totalsSamples = [];         // totals 样本（取每场最主流的大球线）
+const totalsSamples = [];         // totals 样本（从竞彩 ttg 算 P(>2.5)）
 for (const m of odds.matches) {
-  const c = marketConsensus(m);
   if (!m.homeId || !m.awayId) continue;
+  const c = jingcaiToConsensus(m);
+  // h2h：jingcaiToConsensus 用 Shin 去 vig
   if (c.h2h) {
     samples.push({
       homeId: m.homeId, awayId: m.awayId,
       mHome: c.h2h.home, mDraw: c.h2h.draw, mAway: c.h2h.away,
     });
   }
-  // totals：取 line=2.5 的（最主流），否则取第一个
-  if (c.totals && c.totals.length) {
-    const t = c.totals.find(x => Math.abs(x.line - 2.5) < 0.01) || c.totals[0];
-    totalsSamples.push({
-      homeId: m.homeId, awayId: m.awayId,
-      line: t.line, mOver: t.over, mUnder: t.under,
-    });
+  // totals：从竞彩 ttg 归一化概率算 P(总进球 > 2.5)
+  if (c.ttg) {
+    const goals = Object.keys(c.ttg).sort((a, b) => Number(a) - Number(b));
+    if (goals.length >= 4) {
+      const pOver = goals.filter(k => Number(k) >= 3).reduce((s, k) => s + c.ttg[k].impliedProb, 0);
+      totalsSamples.push({ homeId: m.homeId, awayId: m.awayId, line: 2.5, mOver: pOver, mUnder: 1 - pOver });
+    }
   }
 }
 console.log(`📊 参与校准：${samples.length} 场 h2h + ${totalsSamples.length} 场 totals`);

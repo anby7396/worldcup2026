@@ -30,6 +30,14 @@ export async function loadData() {
   } catch { /* odds.json 不存在时忽略 */ }
   data.odds = data.odds || { meta: { fetchedAt: null }, matches: [] };
 
+  // 竞彩赔率：由 scripts/sync-jingcai.mjs 同步到 data/odds-jingcai.json
+  // 价值投注助手的主数据源（含 h2h/让球/比分盘/总进球/半全场）
+  try {
+    const r4 = await fetch('data/odds-jingcai.json');
+    if (r4.ok) data.oddsJingcai = await r4.json();
+  } catch { /* odds-jingcai.json 不存在时忽略 */ }
+  data.oddsJingcai = data.oddsJingcai || { meta: { fetchedAt: null }, matches: [] };
+
   return data;
 }
 

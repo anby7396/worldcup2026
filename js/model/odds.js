@@ -145,3 +145,54 @@ function medianSorted(sorted) {
   if (n % 2 === 1) return sorted[(n - 1) / 2];
   return (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
 }
+
+// ===== 竞彩（sporttery.cn）数据结构 → consensus 格式 =====
+// 竞彩赔率直接存 flat 结构（had/hhad/crs/ttg），不经过 bookmaker 层。
+// 本函数把竞彩 match 转成与 marketConsensus 兼容的 consensus 对象，
+// 同时扩展 crs 和 ttg 两个新字段供 valuebet 比分盘/总进球盘使用。
+
+/**
+ * @param {object} match  来自 odds-jingcai.json 的一场比赛
+ *   { had: {h,d,a}, hhad: {goalLine,h,d,a}, crs: {"H-A":odds}, ttg: {"K":odds} }
+ * @returns { h2h, spreads, crs, ttg }
+ */
+export function jingcaiToConsensus(match) {
+  const out = { h2h: null, spreads: [], crs: null, ttg: null };
+
+  // had → h2h（3 路，用 Shin 去 vig）
+  if (match.had) {
+    const { h, d, a } = match.had;
+    const probs = shin([impliedProb(h), impliedProb(d), impliedProb(a)]);
+    out.h2h = { home: probs[0], draw: probs[1], away: probs[2], source: 'jingcai' };
+  }
+
+  // hhad → spreads（让球盘，2 路归一化：让球后胜负，忽略平局/走盘）
+  if (match.hhad && match.hhad.h) {
+    const { goalLine, h, a } = match.hhad;
+    const [pH, pA] = normalize([impliedProb(h), impliedProb(a)]);
+    out.spreads.push({
+      point: goalLine, home: pH, away: pA,
+      homeOdds: h, awayOdds: a,
+    });
+  }
+
+  // crs → 归一化概率分布（28 路用简单归一化，Shin 对大 n 增益可忽略）
+  if (match.crs && Object.keys(match.crs).length) {
+    const keys = Object.keys(match.crs);
+    const implied = keys.map(k => impliedProb(match.crs[k]));
+    const norm = normalize(implied);
+    out.crs = {};
+    keys.forEach((k, i) => { out.crs[k] = { odds: match.crs[k], impliedProb: norm[i] }; });
+  }
+
+  // ttg → 归一化概率分布
+  if (match.ttg && Object.keys(match.ttg).length) {
+    const keys = Object.keys(match.ttg);
+    const implied = keys.map(k => impliedProb(match.ttg[k]));
+    const norm = normalize(implied);
+    out.ttg = {};
+    keys.forEach((k, i) => { out.ttg[k] = { odds: match.ttg[k], impliedProb: norm[i] }; });
+  }
+
+  return out;
+}

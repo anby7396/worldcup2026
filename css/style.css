@@ -422,3 +422,25 @@ select.team-select:focus { outline: 1px solid var(--accent-2); }
   .vb-bet { grid-template-columns: 1fr auto; gap: 8px; }
   .vb-bet-stake, .vb-bet-ev { grid-column: span 1; text-align: left; }
 }
+
+/* 竞彩价值助手：参考信息区 */
+.vb-info-card { border-left: 3px solid var(--gold); opacity: 0.92; }
+.vb-info-card h3 { margin-bottom: 10px; }
+.vb-info-match { margin-bottom: 12px; }
+.vb-info-head { font-size: 13px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed var(--line); }
+.vb-info-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px; padding: 4px 0; color: var(--text-dim);
+}
+.vb-info-mkt {
+  background: var(--bg-soft); color: var(--text-mute);
+  font-size: 11px; padding: 1px 6px; border-radius: 6px; min-width: 28px; text-align: center;
+}
+.vb-info-name { font-weight: 600; min-width: 80px; }
+.vb-info-comp { flex: 1; display: flex; gap: 5px; }
+.vb-info-edge { font-weight: 700; min-width: 50px; text-align: right; }
+.vb-mkt-tag {
+  display: inline-block; background: var(--accent-2); color: #07111f;
+  font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 5px;
+  vertical-align: middle; margin-left: 4px;
+}

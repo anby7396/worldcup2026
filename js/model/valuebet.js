@@ -27,15 +27,16 @@ const DEFAULTS = {
 
 /**
  * 找出一场比赛的所有正期望价值投注
- * @param {object} match   来自 odds.json 的比赛（含 bookmakers）
+ * @param {object} match   来自 odds.json / odds-jingcai.json 的比赛
  * @param {object} pred    集成模型对该场的预测（含 win/draw/lose/grid/xg）
- * @param {object} opts    { bankroll, kellyFraction, maxStakePct, minEdge }
+ * @param {object} opts    { bankroll, kellyFraction, maxStakePct, minEdge, maxOdds }
+ * @param {object} consensusOverride  可选，传入已算好的 consensus（竞彩模式用 jingcaiToConsensus）
  * @returns { bets: [...], summary }
  */
-export function findValueBets(match, pred, opts = {}) {
+export function findValueBets(match, pred, opts = {}, consensusOverride = null) {
   const cfg = { ...DEFAULTS, ...opts };
   const bankroll = cfg.bankroll || 1000;
-  const consensus = marketConsensus(match);
+  const consensus = consensusOverride || marketConsensus(match);
   const bets = [];
   // 显示用队名：优先中文（由视图传入 homeNameCn/awayNameCn），回退到 API 英文名
   const hn = match.homeNameCn || match.homeName;
@@ -58,7 +59,8 @@ export function findValueBets(match, pred, opts = {}) {
   }
 
   // --- 2. totals 大小球（从模型 grid 算 P(总进球 > line)）---
-  for (const t of consensus.totals) {
+  // 竞彩用 ttg（独立进球数）代替 totals，此部分跳过
+  for (const t of (consensus.totals || [])) {
     // 模型里总进球数 > line 的概率
     let pOver = 0, pUnder = 0;
     for (let h = 0; h < pred.grid.length; h++) {
@@ -223,4 +225,95 @@ export function allocateBudget(bets, budget, strategy = 'proportional', opts = {
     used += stake;
   }
   return out;
+}
+
+// ===== 竞彩专属价值识别：比分盘 (crs) + 总进球盘 (ttg) =====
+// 这是 the-odds-api 不提供的核心能力：模型 grid 逐格 vs 竞彩赔率。
+
+/**
+ * 比分盘价值：模型 grid[h][a] vs 竞彩 crs 赔率隐含概率
+ * @param {object} match  竞彩 match（有 homeNameCn/homeName）
+ * @param {object} pred   模型预测（有 grid）
+ * @param {object} consensus  jingcaiToConsensus 输出（有 crs 字段）
+ */
+export function findCRSValueBets(match, pred, consensus, opts = {}) {
+  if (!consensus.crs) return [];
+  const cfg = { ...DEFAULTS, ...opts };
+  const bankroll = cfg.bankroll || 1000;
+  const bets = [];
+  const hn = match.homeNameCn || match.homeName;
+  const an = match.awayNameCn || match.awayName;
+
+  for (const [score, { odds, impliedProb: marketP }] of Object.entries(consensus.crs)) {
+    const [h, a] = score.split('-').map(Number);
+    if (!pred.grid[h] || !pred.grid[h][a]) continue;
+    const modelP = pred.grid[h][a];
+    const b = odds - 1, p = modelP, q = 1 - p;
+    const edge = p / marketP - 1;
+    if (edge < (cfg.minEdge || 0)) continue;
+    if (cfg.maxOdds && odds > cfg.maxOdds) continue;
+    let kelly = (b * p - q) / b;
+    const kellyPositive = kelly > 0;
+    kelly *= cfg.kellyFraction;
+    kelly = Math.max(0, Math.min(kelly, cfg.maxStakePct));
+    const kellyRaw = kellyPositive ? kelly / cfg.kellyFraction : 0;
+    const stake = kellyPositive ? Math.max(1, Math.round(bankroll * kelly)) : 0;
+    const ev = stake * (p * b - q);
+    // CRS 风险：比分盘 modelP 天然小，阈值比通用低
+    const risk = modelP >= 0.12 ? 'low' : modelP >= 0.06 ? 'medium' : 'high';
+    bets.push({
+      name: `${hn} ${score} ${an}`, market: 'crs', score,
+      marketP, modelP, marketOdds: odds,
+      edge, edgePct: (edge * 100).toFixed(1) + '%',
+      kellyFraction: cfg.kellyFraction, kellyRaw, kellyPositive,
+      stake, stakePct: stake > 0 ? stake / bankroll : 0,
+      expectedValue: ev, expectedReturn: stake + ev, risk,
+    });
+  }
+  return bets.sort((x, y) => y.edge - x.edge);
+}
+
+/**
+ * 总进球盘价值：模型 P(总进球=k) vs 竞彩 ttg 赔率隐含概率
+ */
+export function findTTGValueBets(match, pred, consensus, opts = {}) {
+  if (!consensus.ttg) return [];
+  const cfg = { ...DEFAULTS, ...opts };
+  const bankroll = cfg.bankroll || 1000;
+  const bets = [];
+
+  // 模型：总进球分布 P(total=k) = Σ_{h+a=k} grid[h][a]
+  const totalProb = {};
+  for (let h = 0; h < pred.grid.length; h++) {
+    for (let a = 0; a < pred.grid[h].length; a++) {
+      const k = String(h + a);
+      totalProb[k] = (totalProb[k] || 0) + pred.grid[h][a];
+    }
+  }
+
+  for (const [goals, { odds, impliedProb: marketP }] of Object.entries(consensus.ttg)) {
+    const modelP = totalProb[goals] || 0;
+    const b = odds - 1, p = modelP, q = 1 - p;
+    const edge = p / marketP - 1;
+    if (edge < (cfg.minEdge || 0)) continue;
+    if (cfg.maxOdds && odds > cfg.maxOdds) continue;
+    let kelly = (b * p - q) / b;
+    const kellyPositive = kelly > 0;
+    kelly *= cfg.kellyFraction;
+    kelly = Math.max(0, Math.min(kelly, cfg.maxStakePct));
+    const kellyRaw = kellyPositive ? kelly / cfg.kellyFraction : 0;
+    const stake = kellyPositive ? Math.max(1, Math.round(bankroll * kelly)) : 0;
+    const ev = stake * (p * b - q);
+    // TTG 风险：总进球 2-3 球概率高，0/7 球概率低
+    const risk = modelP >= 0.25 ? 'low' : modelP >= 0.15 ? 'medium' : 'high';
+    bets.push({
+      name: `总进 ${goals} 球`, market: 'ttg', goals,
+      marketP, modelP, marketOdds: odds,
+      edge, edgePct: (edge * 100).toFixed(1) + '%',
+      kellyFraction: cfg.kellyFraction, kellyRaw, kellyPositive,
+      stake, stakePct: stake > 0 ? stake / bankroll : 0,
+      expectedValue: ev, expectedReturn: stake + ev, risk,
+    });
+  }
+  return bets.sort((x, y) => y.edge - x.edge);
 }
