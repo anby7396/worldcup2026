@@ -1,153 +1,184 @@
-// ===== 淘汰赛对阵图（数据驱动：从 sync.mjs 同步的 ESPN 对阵渲染）=====
-// 数据来源 data.results.knockout，按轮次 R32→R16→QF→SF→F (+TP季军赛)。
-// 占位符(1A/2B/3RD)优先用小组积分榜推导成真实球队；推导不出则显示文字占位。
+// ===== 淘汰赛对阵图（左右分区版）=====
+// 经典 tournament bracket 布局：
+//   左侧（上半区）R32→R16→QF→SF → 决赛 ← SF←QF←R16←R32 右侧（下半区）
+// 每场比赛标识：队伍名 + 小组排名来源（如"A组第1""B组第2""最佳第三"）
+// 对位关系用颜色边框标注（同色 = 同一晋级通道）
 
 import { computeStandings, computeThirdPlaceRanking, fmtLocal, bindPredict } from '../data.js';
 
-const ROUND_LABEL = {
-  R32: '1/16 决赛', R16: '1/8 决赛', QF: '1/4 决赛', SF: '半决赛', F: '决赛', TP: '季军赛',
-};
-const ROUND_DATE = {
-  R32: '6/28 – 7/4', R16: '7/4 – 7/7', QF: '7/9 – 7/12', SF: '7/14 – 7/15', F: '7/19', TP: '7/18',
-};
+// 轮次标签
+const RL = { R32: '1/16 决赛', R16: '1/8 决赛', QF: '1/4 决赛', SF: '半决赛', F: '决赛', TP: '季军赛' };
+// 对位颜色（8 个通道：上半区 4 + 下半区 4）
+const PAIR_COLORS = ['#38bdf8', '#4ade80', '#fbbf24', '#f87171', '#c084fc', '#fb923c', '#34d399', '#f472b6'];
 
-// 把 ESPN 的占位符描述翻译成更友好的中文，并尽量推导出真实球队
-function describeSlot(abbr, isReal, name, data, thirds) {
-  if (isReal) {
-    const t = data.teamMap[abbr];
-    return t ? { flag: t.flag, name: t.nameCn, real: true } : { flag: '', name, real: false };
-  }
-  // 占位符
-  const m = abbr;
-  if (/^[12][A-L]$/.test(m)) {
-    const pos = m[0], grp = m.slice(1);
-    const st = computeStandings(data, grp);
-    const team = st[parseInt(pos, 10) - 1]?.team;
-    if (team) return { flag: team.flag, name: team.nameCn, real: true, derived: `${pos}${grp}` };
-    return { flag: '', name: `小组${grp}第${pos}`, real: false };
-  }
-  if (m === '3RD') {
-    if (thirds.length) return { flag: thirds[0].team.flag, name: `最好第三名·${thirds[0].team.nameCn}`, real: false, derived: '3RD' };
-    return { flag: '', name: '最好的第三名', real: false };
-  }
-  if (/^RD32/.test(m)) return { flag: '', name: '1/16决赛胜者', real: false };
-  if (/^RD16/.test(m)) return { flag: '', name: '1/8决赛胜者', real: false };
-  if (/^QF/.test(m)) return { flag: '', name: '1/4决赛胜者', real: false };
-  if (/^SFW/.test(m)) return { flag: '', name: '半决赛胜者', real: false };
-  if (/^SF\s*L/.test(m)) return { flag: '', name: '半决赛负者', real: false };
-  return { flag: '', name, real: false };
+// 来源描述："1A" → "A组第1"，"2B" → "B组第2"，"3RD" → "最佳第三"
+function originLabel(abbr) {
+  if (!abbr) return '';
+  if (/^[12][A-L]$/.test(abbr)) return abbr[1] + '组第' + abbr[0];
+  if (abbr === '3RD') return '最佳第三';
+  if (/^RD32/.test(abbr)) return '1/16决赛胜者';
+  if (/^RD16/.test(abbr)) return '1/8决赛胜者';
+  if (/^QF/.test(abbr)) return '1/4决赛胜者';
+  if (/^SFW/.test(abbr)) return '半决赛胜者';
+  if (/^SF\s*L/.test(abbr)) return '半决赛负者';
+  return '';
 }
 
-function matchHtml(match, data, thirds) {
-  const home = describeSlot(match.home, match.homeReal, match.homeName, data, thirds);
-  const away = describeSlot(match.away, match.awayReal, match.awayName, data, thirds);
+// 推导占位符对应的真实球队
+function resolveSlot(abbr, isReal, name, data, thirds) {
+  if (isReal) {
+    const t = data.teamMap[abbr];
+    return t ? { flag: t.flag, name: t.nameCn, id: abbr } : { flag: '🏳️', name, id: abbr };
+  }
+  if (/^[12][A-L]$/.test(abbr)) {
+    const pos = parseInt(abbr[0], 10), grp = abbr.slice(1);
+    const st = computeStandings(data, grp);
+    const team = st[pos - 1]?.team;
+    if (team) return { flag: team.flag, name: team.nameCn, id: team.id, derived: abbr };
+    return { flag: '🏳️', name: `${grp}组第${pos}`, id: abbr };
+  }
+  if (abbr === '3RD') {
+    const t = thirds[0]?.team;
+    return t ? { flag: t.flag, name: t.nameCn, id: t.id, derived: '3RD' } : { flag: '🏳️', name: '最佳第三', id: abbr };
+  }
+  return { flag: '🏳️', name: name || abbr, id: abbr };
+}
+
+// 渲染一场比赛的 slot
+function slotHtml(match, data, thirds, pairColor) {
+  const h = resolveSlot(match.home, match.homeReal, match.homeName, data, thirds);
+  const a = resolveSlot(match.away, match.awayReal, match.awayName, data, thirds);
+  const hOrigin = originLabel(match.home);
+  const aOrigin = originLabel(match.away);
   const hWin = match.winner === 'home', aWin = match.winner === 'away';
   const scoreStr = match.done ? `${match.homeScore} - ${match.awayScore}` : null;
-  const dim = (winner, ok) => winner && !ok ? 'opacity:.45;' : '';
-  const cls = match.done ? 'done' : '';
-  // 两队都已确定真实球队 → 可预测
-  const canPredict = match.homeReal && match.awayReal;
-  // 未完赛显示开球时间（本地时区）
+  const venue = match.venue || '';
   const timeStr = !match.done && match.date ? fmtLocal(match.date) : '';
+  const canPredict = match.homeReal && match.awayReal;
+  const borderC = pairColor || 'var(--line)';
 
-  return `<div class="slot ${cls}" style="min-height:auto;">
-    ${match.venue ? `<div class="mnum">${match.venue}</div>` : ''}
-    <div class="line">
-      <div class="side" style="${dim(hWin,true)}">
-        <span class="flag">${home.flag || '🏳️'}</span>
-        <span class="nm">${home.name}</span>
-      </div>
-      <span class="sc">${match.done ? (hWin ? '<b>'+match.homeScore+'</b>' : match.homeScore) : ''}</span>
+  return `<div class="brk-slot" style="border-left:3px solid ${borderC}">
+    <div class="brk-team${hWin ? ' brk-win' : ''}${match.done && !hWin ? ' brk-lose' : ''}">
+      <span class="flag">${h.flag || '🏳️'}</span>
+      <span class="brk-name">${h.name}</span>
+      <span class="brk-origin">${hOrigin}</span>
     </div>
-    <div class="line">
-      <div class="side" style="${dim(aWin,true)}">
-        <span class="flag">${away.flag || '🏳️'}</span>
-        <span class="nm">${away.name}</span>
-      </div>
-      <span class="sc">${match.done ? (aWin ? '<b>'+match.awayScore+'</b>' : match.awayScore) : ''}</span>
+    <div class="brk-mid">
+      ${scoreStr ? `<span class="brk-score">${scoreStr}</span>` : `<span class="brk-vs">vs</span>`}
+      ${timeStr ? `<span class="brk-time">${timeStr}</span>` : ''}
     </div>
-    ${timeStr ? `<div class="match-time">⏰ ${timeStr}</div>` : ''}
-    ${canPredict ? `<button class="pred-btn" data-h="${match.home}" data-a="${match.away}">🔮 预测</button>` : ''}
+    <div class="brk-team${aWin ? ' brk-win' : ''}${match.done && !aWin ? ' brk-lose' : ''}">
+      <span class="flag">${a.flag || '🏳️'}</span>
+      <span class="brk-name">${a.name}</span>
+      <span class="brk-origin">${aOrigin}</span>
+    </div>
+    ${venue ? `<div class="brk-venue">📍${venue}</div>` : ''}
+    ${canPredict ? `<button class="pred-btn" data-h="${h.id}" data-a="${a.id}">🔮</button>` : ''}
   </div>`;
 }
 
-// 判断比赛属于哪个半区（前半上半区、后半下半区）
-// R32:[0-7]=上,[8-15]=下  R16:[0-3]=上,[4-7]=下  QF:[0-1]=上,[2-3]=下  SF:[0]=上,[1]=下
-function halfZone(round, index, total) {
-  if (round === 'F' || round === 'TP') return null;
-  return index < total / 2 ? 'upper' : 'lower';
+// 渲染一个半区（8 场 R32 → 4 场 R16 → 2 场 QF → 1 场 SF）
+function halfHtml(rounds, data, thirds, pairOffset) {
+  // rounds: { r32: [8], r16: [4], qf: [2], sf: [1] }
+  const cols = [
+    { key: 'r32', label: '1/16', pairStep: 2 },
+    { key: 'r16', label: '1/8', pairStep: 1 },
+    { key: 'qf',  label: '1/4', pairStep: 1 },
+    { key: 'sf',  label: '半决赛', pairStep: 1 },
+  ];
+
+  return cols.map((col, ci) => {
+    const matches = rounds[col.key] || [];
+    const slots = matches.map((m, i) => {
+      // 对位颜色：R32 两两一对（0,1→color0；2,3→color1...），R16 直接对应
+      const pairIdx = ci === 0 ? Math.floor(i / 2) + pairOffset :
+                      ci === 1 ? i + pairOffset :
+                      ci === 2 ? i + pairOffset :
+                      pairOffset;
+      const color = PAIR_COLORS[pairIdx % PAIR_COLORS.length];
+      return slotHtml(m, data, thirds, color);
+    }).join('');
+    return `<div class="brk-round"><div class="brk-round-lbl">${col.label}</div>${slots}</div>`;
+  }).join('');
 }
 
 export function renderBracket(root, data) {
   const ko = data.results?.knockout;
   const thirds = computeThirdPlaceRanking(data);
-  const rounds = ['R32', 'R16', 'QF', 'SF', 'F', 'TP'];
 
   if (!ko || !ko.R32) {
-    root.innerHTML = noData();
+    root.innerHTML = `<div class="view-head"><h2>淘汰赛对阵图</h2>
+      <p>运行 <code>npm run sync</code> 后刷新，即可看到完整对阵。</p></div>`;
     return;
   }
 
-  const cols = rounds.filter(r => ko[r] && ko[r].length).map(r => `
-    <div class="bracket-col">
-      <h4>${ROUND_LABEL[r]}<small>${ROUND_DATE[r]} · ${ko[r].length}场</small></h4>
-      ${ko[r].map((m, i) => {
-        const zone = halfZone(r, i, ko[r].length);
-        const zoneTag = zone ? `<span class="zone-tag zone-${zone}">${zone === 'upper' ? '上半区' : '下半区'}</span>` : '';
-        return zoneTag + matchHtml(m, data, thirds);
-      }).join('')}
-    </div>`).join('');
+  const r32 = ko.R32, r16 = ko.R16 || [], qf = ko.QF || [], sf = ko.SF || [], f = ko.F || [], tp = ko.TP || [];
+
+  // 上半区：前半，下半区：后半
+  const upper = { r32: r32.slice(0, 8), r16: r16.slice(0, 4), qf: qf.slice(0, 2), sf: sf[0] ? [sf[0]] : [] };
+  const lower = { r32: r32.slice(8, 16), r16: r16.slice(4, 8), qf: qf.slice(2, 4), sf: sf[1] ? [sf[1]] : [] };
+
+  // 决赛 + 季军赛
+  const finalHtml = f[0] ? slotHtml(f[0], data, thirds, null) : '<div class="brk-slot brk-placeholder">决赛待定</div>';
+  const thirdHtml = tp[0] ? slotHtml(tp[0], data, thirds, null) : '';
 
   const koDone = Object.values(ko).flat().filter(m => m.done).length;
-  // 上半区/下半区的代表队（从 R32 推导）
-  const r32 = ko.R32;
-  const upperTeams = r32.slice(0, 8).map(m => describeSlot(m.home, m.homeReal, m.homeName, data, thirds).name + ' vs ' + describeSlot(m.away, m.awayReal, m.awayName, data, thirds).name);
-  const lowerTeams = r32.slice(8, 16).map(m => describeSlot(m.home, m.homeReal, m.homeName, data, thirds).name + ' vs ' + describeSlot(m.away, m.awayReal, m.awayName, data, thirds).name);
+
+  // 选位分析摘要（哪些强队在哪个半区）
+  const upperTeams = r32.slice(0, 8).flatMap(m => {
+    const h = resolveSlot(m.home, m.homeReal, m.homeName, data, thirds);
+    const a = resolveSlot(m.away, m.awayReal, m.awayName, data, thirds);
+    return [h.name, a.name];
+  }).filter(n => n && n !== '最佳第三');
+  const lowerTeams = r32.slice(8, 16).flatMap(m => {
+    const h = resolveSlot(m.home, m.homeReal, m.homeName, data, thirds);
+    const a = resolveSlot(m.away, m.awayReal, m.awayName, data, thirds);
+    return [h.name, a.name];
+  }).filter(n => n && n !== '最佳第三');
 
   root.innerHTML = `
     <div class="view-head">
       <h2>淘汰赛对阵图</h2>
-      <p>48 队 → 32 队淘汰赛。前 2 名 + 8 个最佳第三名晋级，分<strong>上半区</strong>和<strong>下半区</strong>两条通道，
-        各自决出一个决赛名额。西班牙与阿根廷被安排在不同半区（FIFA 排名保护），最早只能在决赛相遇。</p>
+      <p>48 队 → 32 队淘汰赛。分<strong>上半区</strong>（蓝色）和<strong>下半区</strong>（紫色）两条通道，
+        各自决出一个决赛名额。同色边框 = 同一晋级通道（对位关系）。</p>
     </div>
 
-    <div class="zone-summary">
-      <div class="zone-card zone-upper-card">
-        <h4>🔺 上半区（${r32.length >= 8 ? '8 场 1/16 决赛' : ''}）</h4>
-        <div class="zone-desc">对阵通道：1/16 → 1/8 → 1/4 → 半决赛 → 决赛</div>
+    <div class="brk-summary">
+      <div class="brk-sum-card" style="border-left:3px solid var(--accent-2)">
+        <h4>🔺 上半区</h4>
+        <div class="brk-sum-desc">${upperTeams.slice(0, 6).join('、')}${upperTeams.length > 6 ? '…' : ''}</div>
       </div>
-      <div class="zone-card zone-lower-card">
-        <h4>🔻 下半区（${r32.length >= 16 ? '8 场 1/16 决赛' : ''}）</h4>
-        <div class="zone-desc">对阵通道：1/16 → 1/8 → 1/4 → 半决赛 → 决赛</div>
+      <div class="brk-sum-card" style="border-left:3px solid #c084fc">
+        <h4>🔻 下半区</h4>
+        <div class="brk-sum-desc">${lowerTeams.slice(0, 6).join('、')}${lowerTeams.length > 6 ? '…' : ''}</div>
       </div>
     </div>
 
-    <div class="bracket-wrap">
-      <div class="bracket">${cols}</div>
+    <div class="brk-split">
+      <div class="brk-half brk-upper">
+        ${halfHtml(upper, data, thirds, 0)}
+      </div>
+
+      <div class="brk-center">
+        <div class="brk-center-label">决赛 · 7/19</div>
+        ${finalHtml}
+        ${thirdHtml ? `<div class="brk-center-label" style="margin-top:16px;">季军赛 · 7/18</div>${thirdHtml}` : ''}
+      </div>
+
+      <div class="brk-half brk-lower">
+        ${halfHtml(lower, data, thirds, 4)}
+      </div>
     </div>
 
-    <div class="bracket-note">
-      <b>📌 半区与对位说明</b><br>
-      • <span class="zone-tag zone-upper" style="font-size:11px;">上半区</span> 和
-        <span class="zone-tag zone-lower" style="font-size:11px;">下半区</span> 标注了每场比赛所属的半区通道<br>
-      • 1/16 决赛前 8 场 → 上半区，后 8 场 → 下半区，各自独立晋级直到半决赛<br>
-      • 半决赛：上半区胜者 vs 上半区胜者，下半区胜者 vs 下半区胜者，两场胜者会师决赛<br>
+    <div class="brk-note">
+      <b>📌 对位说明</b><br>
+      • <span style="color:#38bdf8">■</span> <span style="color:#4ade80">■</span> <span style="color:#fbbf24">■</span> <span style="color:#f87171">■</span> 上半区 4 条晋级通道 &nbsp;
+        <span style="color:#c084fc">■</span> <span style="color:#fb923c">■</span> <span style="color:#34d399">■</span> <span style="color:#f472b6">■</span> 下半区 4 条晋级通道<br>
+      • 同色边框的比赛属于同一晋级通道：R32 两场（同色）→ 胜者在 R16 对阵 → 一路到半决赛<br>
+      • "A组第1" 等标注显示了每队的小组出线名次（占位符在小组赛结束后替换为真实队名）<br>
       • 西班牙（FIFA #1）和阿根廷（FIFA #2）被分在不同半区，最早只能在决赛相遇<br>
-      • 两队都已确定时可点「🔮 预测」分析该场
-      ${koDone ? `<br>• 已完赛 <b>${koDone}</b> 场` : '<br>• 淘汰赛尚未开始'}
+      • 两队都已确定时可点「🔮」预测该场${koDone ? ` · 已完赛 <b>${koDone}</b> 场` : ''}
     </div>
   `;
   bindPredict(root);
-}
-
-function noData() {
-  return `
-    <div class="view-head">
-      <h2>淘汰赛对阵图</h2>
-      <p>对阵数据尚未同步。运行 <code>npm run sync</code> 后刷新即可看到完整的 1/16 决赛对阵。</p>
-    </div>
-    <div class="bracket-note">
-      尚无淘汰赛数据。请在终端执行：<br>
-      <code style="color:var(--accent)">npm run sync</code>
-    </div>`;
 }

@@ -467,3 +467,92 @@ select.team-select:focus { outline: 1px solid var(--accent-2); }
 .zone-lower-card h4 { color: #c084fc; }
 .zone-desc { font-size: 12px; color: var(--text-dim); }
 @media (max-width: 640px) { .zone-summary { grid-template-columns: 1fr; } }
+
+/* ===== 淘汰赛对阵图（左右分区版）===== */
+.brk-summary {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;
+}
+.brk-sum-card {
+  border-radius: var(--radius); padding: 12px 14px;
+  background: linear-gradient(180deg, var(--card), var(--card-2));
+  border: 1px solid var(--line);
+}
+.brk-sum-card h4 { margin: 0 0 4px; font-size: 14px; }
+.brk-sum-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+.brk-split {
+  display: flex; justify-content: center; gap: 8px;
+  overflow-x: auto; padding: 12px 0 20px; align-items: stretch;
+}
+.brk-half {
+  display: flex; gap: 0;
+  min-height: 520px;
+}
+.brk-lower { flex-direction: row-reverse; }
+.brk-round {
+  display: flex; flex-direction: column;
+  justify-content: space-around;
+  min-width: 155px; padding: 0 4px;
+}
+.brk-round-lbl {
+  text-align: center; font-size: 11px; font-weight: 700;
+  color: var(--text-mute); padding: 4px 0 8px; letter-spacing: 1px;
+}
+.brk-center {
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: center; min-width: 170px; padding: 0 8px;
+}
+.brk-center-label {
+  font-size: 12px; font-weight: 700; color: var(--gold);
+  text-align: center; margin-bottom: 8px; letter-spacing: 1px;
+}
+
+/* 比赛 slot */
+.brk-slot {
+  background: linear-gradient(180deg, var(--card), var(--card-2));
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 6px 8px; margin: 5px 0;
+  position: relative; min-height: 56px;
+  display: flex; flex-direction: column; justify-content: center;
+  transition: transform .1s;
+}
+.brk-slot:hover { transform: scale(1.02); z-index: 2; }
+.brk-slot .pred-btn {
+  position: absolute; right: 4px; top: 4px;
+  font-size: 10px; padding: 2px 5px; border-radius: 6px;
+}
+.brk-team {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12.5px; padding: 2px 0; border-radius: 4px;
+}
+.brk-team .flag { font-size: 15px; min-width: 20px; text-align: center; }
+.brk-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+.brk-origin {
+  font-size: 10px; color: var(--text-mute); background: var(--bg-soft);
+  padding: 1px 5px; border-radius: 4px; white-space: nowrap;
+}
+.brk-win { background: rgba(74,222,128,.08); }
+.brk-win .brk-name { color: var(--accent); }
+.brk-lose { opacity: .55; }
+.brk-mid {
+  text-align: center; font-size: 11px; color: var(--text-mute);
+  padding: 1px 0;
+}
+.brk-score { font-weight: 800; font-size: 14px; color: var(--accent); letter-spacing: 1px; }
+.brk-vs { font-size: 10px; }
+.brk-time { font-size: 10px; color: var(--accent-2); margin-left: 6px; }
+.brk-venue { font-size: 9.5px; color: var(--text-mute); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brk-placeholder { color: var(--text-mute); font-size: 12px; text-align: center; }
+
+.brk-note {
+  font-size: 12.5px; color: var(--text-dim); line-height: 1.7;
+  padding: 14px; background: var(--bg-soft);
+  border-radius: var(--radius); margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+  .brk-split { flex-direction: column; align-items: center; }
+  .brk-half { min-height: auto; flex-direction: column !important; }
+  .brk-round { flex-direction: row; flex-wrap: wrap; justify-content: center; min-width: auto; }
+  .brk-center { min-width: auto; margin: 16px 0; }
+}
